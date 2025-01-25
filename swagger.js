@@ -1,4 +1,4 @@
-import swaggerAutogen from 'swagger-autogen';
+import swaggerAutogen from 'swagger-autogen'; // Import the swagger-autogen library
 
 const doc = {
     info: {
@@ -7,9 +7,9 @@ const doc = {
     },
     host: 'localhost:3000',
     schemes: ['http']
-};
+}; // Define the swagger document
 
-const outputFile = './swagger_output.json';
-const endpointsFiles = ['./routes/products.js'];
+const outputFile = './swagger_output.json'; // Define the output file
+const endpointsFiles = ['./routes/products.js']; // Define the endpoint files
 
-swaggerAutogen()(outputFile, endpointsFiles, doc);
+swaggerAutogen()(outputFile, endpointsFiles, doc); // Generate the swagger documentation

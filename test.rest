@@ -1,0 +1,81 @@
+### Get All Products
+GET http://localhost:3000/api/products
+
+### Get All Categories
+GET http://localhost:3000/api/categories
+
+### Get Product by ID Products
+GET http://localhost:3000/api/products/67953bf897f9f01aac2a9d7d
+
+### Get Product by ID Categories
+GET http://localhost:3000/api/categories/67953c5697f9f01aac2a9d8c
+
+### Create Product
+POST http://localhost:3000/api/products
+Content-Type: application/json
+
+{
+    "name": "Gaming Laptop",
+    "price": 1299.99,
+    "description": "High-performance gaming laptop",
+    "category": "Laptops",
+    "brand": "Dell",
+    "stock": 50,
+    "SKU": "GL-2024-001",
+    "specifications": {
+        "processor": "Intel i9",
+        "ram": "32GB",
+        "storage": "1TB SSD"
+    },
+    "warranty": "2 years",
+    "inStock": true
+}
+
+### Create Category
+POST http://localhost:3000/api/categories
+Content-Type: application/json
+
+{
+    "name": "Gaming",
+    "description": "Gaming devices and accessories",
+    "isActive": true,
+    "features": ["Performance", "Graphics", "Storage"],
+    "brands": ["Razer", "Alienware", "MSI"]
+}
+
+
+### Update Product
+PUT http://localhost:3000/api/products/67953bf897f9f01aac2a9d7d
+Content-Type: application/json
+
+{
+    "name": "iPhone 16 Pro",
+    "price": 1499.99,
+    "description": "Latest Apple smartphone with A17 chip",
+    "category": "Smartphones",
+    "brand": "Apple",
+    "stock":120,
+    "SKU": "IPH15P-256-BLB"
+}
+
+### Update Category
+PUT http://localhost:3000/api/categories/67953c3097f9f01aac2a9d86
+Content-Type: application/json
+
+{
+    "name": "Gaming",
+    "description": "Updated gaming category description",
+    "isActive": true
+}
+
+### Delete Product 
+DELETE http://localhost:3000/api/products/67953c0897f9f01aac2a9d7f
+
+
+{
+    "name": "Gaming Gear",
+    "description": "Updated gaming devices and accessories"
+}
+
+### Delete Category 
+DELETE http://localhost:3000/api/categories/67953c3e97f9f01aac2a9d88

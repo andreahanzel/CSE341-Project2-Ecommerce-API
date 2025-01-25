@@ -1,7 +1,8 @@
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
+// Purpose: To connect to the database
+import mongoose from 'mongoose'; // Import mongoose
+import dotenv from 'dotenv'; // Import dotenv
 
-dotenv.config();
+dotenv.config(); // Load the .env file
 
 const connectDB = async () => {
     try {
@@ -11,6 +12,6 @@ const connectDB = async () => {
         console.error('MongoDB connection error:', error);
         process.exit(1);
     }
-};
+}; // Function to connect to the database
 
-export default connectDB;
+export default connectDB; // Export the function so it can be used in other files
