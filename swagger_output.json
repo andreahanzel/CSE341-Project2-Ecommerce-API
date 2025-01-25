@@ -2,21 +2,31 @@
   "swagger": "2.0",
   "info": {
     "title": "E-commerce API",
-    "description": "API for managing e-commerce products",
+    "description": "API for managing e-commerce products and categories",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
-  "basePath": "/",
+  "host": "cse341-ecommerce-api.onrender.com",
+  "basePath": "/api",
   "schemes": [
-    "http"
+    "https"
   ],
   "paths": {
     "/": {
       "get": {
         "description": "",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "500": {
             "description": "Internal Server Error"
