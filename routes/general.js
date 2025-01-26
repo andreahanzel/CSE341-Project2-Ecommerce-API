@@ -3,7 +3,6 @@ import { getAllProducts, createProduct } from '../controllers/products.js';
 import { getAllCategories, createCategory } from '../controllers/categories.js';
 import { validateProduct, validateCategory } from '../middleware/validation.js';
 
-
 const router = express.Router();
 
 /**
@@ -51,37 +50,84 @@ router.get('/', async (req, res) => {
  * /api:
  *   post:
  *     summary: Create a new product or category
- *     parameters:
- *       - in: query
- *         name: type
- *         required: true
- *         description: Specify the type of item to create (e.g., products or categories)
- *         schema:
- *           type: string
- *           enum:
- *             - products
- *             - categories
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             oneOf:
- *               - $ref: '#/components/schemas/Product'
- *               - $ref: '#/components/schemas/Category'
+ *             type: object
+ *             required:
+ *               - type
+ *               - name
+ *               - description
+ *             properties:
+ *               type:
+ *                 type: string
+ *                 description: The type of the item (products or categories)
+ *                 enum:
+ *                   - products
+ *                   - categories
+ *               name:
+ *                 type: string
+ *                 description: Name of the product or category
+ *               price:
+ *                 type: number
+ *                 description: Price of the product (required for products)
+ *               description:
+ *                 type: string
+ *                 description: Description of the product or category
+ *               category:
+ *                 type: string
+ *                 description: Category of the product (required for products)
+ *               brand:
+ *                 type: string
+ *                 description: Brand of the product
+ *               stock:
+ *                 type: integer
+ *                 description: Stock quantity of the product
+ *               SKU:
+ *                 type: string
+ *                 description: Stock-keeping unit identifier
+ *               specifications:
+ *                 type: object
+ *                 description: Specifications of the product
+ *                 properties:
+ *                   processor:
+ *                     type: string
+ *                   ram:
+ *                     type: string
+ *                   storage:
+ *                     type: string
+ *               warranty:
+ *                 type: string
+ *                 description: Warranty period for the product
+ *               inStock:
+ *                 type: boolean
+ *                 description: Whether the product is in stock
+ *               isActive:
+ *                 type: boolean
+ *                 description: Whether the category is active
+ *               features:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Features of the category
+ *               brands:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Brands associated with the category
  *     responses:
  *       201:
  *         description: Item successfully created
  *       400:
- *         description: Invalid type parameter or invalid input
+ *         description: Invalid input
  *       500:
- *         description: Internal server error
+ *         description: Internal Server Error
  */
 
-
 router.post('/', async (req, res) => {
-    const { type } = req.query;
-    const data = req.body;
+    const { type, ...data } = req.body;
 
     try {
         if (type === 'products') {

@@ -29,7 +29,7 @@ const doc = {
                             storage: { type: 'string' },
                         },
                     },
-                    warranty: { type: 'string' }, // New property
+                    warranty: { type: 'string' },
                     inStock: { type: 'boolean' },
                 },
             },
@@ -54,12 +54,11 @@ const doc = {
     },
 };
 
-
 const outputFile = './swagger_output.json';
 const endpointsFiles = [
     './routes/products.js',
     './routes/categories.js',
-    './routes/general.js'
+    './routes/general.js',
 ];
 
 swaggerAutogen()(outputFile, endpointsFiles, doc);

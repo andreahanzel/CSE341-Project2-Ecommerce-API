@@ -37,9 +37,19 @@
         "description": "",
         "parameters": [
           {
-            "name": "type",
-            "in": "query",
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "example": "any"
+                },
+                "data": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {
