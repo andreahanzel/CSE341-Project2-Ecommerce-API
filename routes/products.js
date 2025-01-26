@@ -7,15 +7,17 @@ const router = express.Router(); // Create a new router
 /**
  * @swagger
  * /api/products:
- *   get:
- *     summary: Retrieve all products
- *     responses:
- *       200:
- *         description: A list of all products
- *       500:
- *         description: Server error
  *   post:
  *     summary: Create a new product
+ *     parameters:
+ *       - in: query
+ *         name: type
+ *         required: true
+ *         description: Choose "products" to create a product
+ *         schema:
+ *           type: string
+ *           enum:
+ *             - products
  *     requestBody:
  *       required: true
  *       content:
@@ -35,20 +37,27 @@ const router = express.Router(); // Create a new router
  *                 description: Price of the product
  *               description:
  *                 type: string
+ *                 description: Product description
  *               category:
  *                 type: string
+ *                 description: Product category
  *               brand:
  *                 type: string
+ *                 description: Product brand
  *               stock:
  *                 type: integer
+ *                 description: Stock quantity
  *               SKU:
  *                 type: string
+ *                 description: Stock-keeping unit identifier
  *     responses:
  *       201:
  *         description: Product successfully created
  *       400:
  *         description: Invalid input
  */
+
+
 
 /**
  * @swagger

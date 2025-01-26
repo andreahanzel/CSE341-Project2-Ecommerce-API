@@ -7,15 +7,17 @@ const router = express.Router(); // Create a new router
 /**
  * @swagger
  * /api/categories:
- *   get:
- *     summary: Retrieve all categories
- *     responses:
- *       200:
- *         description: A list of all categories
- *       500:
- *         description: Server error
  *   post:
  *     summary: Create a new category
+ *     parameters:
+ *       - in: query
+ *         name: type
+ *         required: true
+ *         description: Choose "categories" to create a category
+ *         schema:
+ *           type: string
+ *           enum:
+ *             - categories
  *     requestBody:
  *       required: true
  *       content:
@@ -28,24 +30,30 @@ const router = express.Router(); // Create a new router
  *             properties:
  *               name:
  *                 type: string
+ *                 description: Name of the category
  *               description:
  *                 type: string
+ *                 description: Category description
  *               isActive:
  *                 type: boolean
+ *                 description: If the category is active
  *               features:
  *                 type: array
  *                 items:
  *                   type: string
+ *                 description: Features of the category
  *               brands:
  *                 type: array
  *                 items:
  *                   type: string
+ *                 description: Associated brands
  *     responses:
  *       201:
  *         description: Category successfully created
  *       400:
  *         description: Invalid input
  */
+
 
 /**
  * @swagger
