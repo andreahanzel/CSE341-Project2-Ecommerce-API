@@ -1,133 +1,114 @@
-import express from 'express'; // Import the express library
-import { getAllCategories, getCategoryById, createCategory, updateCategory, deleteCategory } from '../controllers/categories.js'; // Import the category controller functions
-import { validateCategory } from '../middleware/validation.js'; // Import the validateCategory function
+// routes/categories.js
+import express from 'express';
+import { getAllCategories, getCategoryById, createCategory, updateCategory, deleteCategory } from '../controllers/categories.js';
+import { validateCategory } from '../middleware/validation.js';
 
-const router = express.Router(); // Create a new router
+const router = express.Router();
+
+/**
+ * @swagger
+ * /api/categories:
+ *   get:
+ *     tags: [Categories]
+ *     summary: Get all categories
+ *     responses:
+ *       200:
+ *         description: List of all categories
+ */
 
 /**
  * @swagger
  * /api/categories:
  *   post:
+ *     tags: [Categories]
  *     summary: Create a new category
- *     parameters:
- *       - in: query
- *         name: type
- *         required: true
- *         description: Choose "categories" to create a category
- *         schema:
- *           type: string
- *           enum:
- *             - categories
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - name
- *               - description
- *             properties:
- *               name:
- *                 type: string
- *                 description: Name of the category
- *               description:
- *                 type: string
- *                 description: Category description
- *               isActive:
- *                 type: boolean
- *                 description: If the category is active
- *               features:
- *                 type: array
- *                 items:
- *                   type: string
- *                 description: Features of the category
- *               brands:
- *                 type: array
- *                 items:
- *                   type: string
- *                 description: Associated brands
+ *             $ref: '#/components/schemas/Category'
  *     responses:
  *       201:
- *         description: Category successfully created
+ *         description: Category created
  *       400:
- *         description: Invalid input
+ *         description: Bad Request
+ * 
+ * components:
+ *   schemas:
+ *     Category:
+ *       type: object
+ *       required:
+ *         - name
+ *         - description
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: Category name
+ *           example: "Gaming"
+ *         description:
+ *           type: string
+ *           description: Category description
+ *           example: "Gaming devices and accessories"
+ *         isActive:
+ *           type: boolean
+ *           description: Category status
+ *           example: true
+ *         features:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: Category features
+ *           example: ["Performance", "Graphics", "Storage"]
+ *         brands:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: Associated brands
+ *           example: ["Razer", "Alienware", "MSI"]
  */
-
 
 /**
  * @swagger
  * /api/categories/{id}:
- *   get:
- *     summary: Retrieve a category by ID
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: The category ID
- *     responses:
- *       200:
- *         description: Category details
- *       404:
- *         description: Category not found
  *   put:
- *     summary: Update a category by ID
+ *     tags: [Categories]
+ *     summary: Update a category
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: The category ID
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *               description:
- *                 type: string
- *               isActive:
- *                 type: boolean
- *               features:
- *                 type: array
- *                 items:
- *                   type: string
- *               brands:
- *                 type: array
- *                 items:
- *                   type: string
+ *             $ref: '#/components/schemas/Category'
  *     responses:
  *       200:
- *         description: Category successfully updated
- *       404:
- *         description: Category not found
+ *         description: Category updated
+ *       400:
+ *         description: Bad Request
  *   delete:
- *     summary: Delete a category by ID
+ *     tags: [Categories]
+ *     summary: Delete a category
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: The category ID
  *     responses:
  *       200:
- *         description: Category successfully deleted
- *       404:
- *         description: Category not found
+ *         description: Category deleted
  */
 
+router.get('/', getAllCategories);
+router.get('/:id', getCategoryById);
+router.post('/', validateCategory, createCategory);
+router.put('/:id', validateCategory, updateCategory);
+router.delete('/:id', deleteCategory);
 
-router.get('/', getAllCategories); // GET request for all categories
-router.get('/:id', getCategoryById); // GET request for a category by ID
-router.post('/', validateCategory, createCategory); // POST request to create a category
-router.put('/:id', validateCategory, updateCategory); // PUT request to update a category
-router.delete('/:id', deleteCategory); // DELETE request to delete a category
-
-export default router; // Export the router
+export default router;

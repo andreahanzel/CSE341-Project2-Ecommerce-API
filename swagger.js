@@ -3,62 +3,36 @@ import swaggerAutogen from 'swagger-autogen';
 const doc = {
     info: {
         title: 'E-commerce API',
-        description: 'API for managing e-commerce products and categories',
+        description: 'API for managing e-commerce products and categories'
     },
-    host: 'cse341-ecommerce-api.onrender.com',
-    basePath: '/api',
-    schemes: ['https'],
-    components: {
-        schemas: {
-            Product: {
-                type: 'object',
-                required: ['name', 'price', 'category'],
-                properties: {
-                    name: { type: 'string' },
-                    price: { type: 'number' },
-                    description: { type: 'string' },
-                    category: { type: 'string' },
-                    brand: { type: 'string' },
-                    stock: { type: 'integer' },
-                    SKU: { type: 'string' },
-                    specifications: {
-                        type: 'object',
-                        properties: {
-                            processor: { type: 'string' },
-                            ram: { type: 'string' },
-                            storage: { type: 'string' },
-                        },
-                    },
-                    warranty: { type: 'string' },
-                    inStock: { type: 'boolean' },
-                },
-            },
-            Category: {
-                type: 'object',
-                required: ['name', 'description'],
-                properties: {
-                    name: { type: 'string' },
-                    description: { type: 'string' },
-                    isActive: { type: 'boolean' },
-                    features: {
-                        type: 'array',
-                        items: { type: 'string' },
-                    },
-                    brands: {
-                        type: 'array',
-                        items: { type: 'string' },
-                    },
-                },
-            },
+    host: 'localhost:3000',
+    schemes: ['http', 'https'],
+    tags: [
+        { name: 'General', description: 'General collection operations' },
+        { name: 'Products', description: 'Product management endpoints' },
+        { name: 'Categories', description: 'Category management endpoints' }
+    ],
+    definitions: {
+        Product: {
+            name: "Gaming Laptop",
+            price: 1299.99,
+            description: "High-performance gaming laptop",
+            category: "Laptops",
+            brand: "Dell",
+            stock: 50,
+            SKU: "GL-2024-001"
         },
-    },
+        Category: {
+            name: "Gaming",
+            description: "Gaming devices and accessories",
+            isActive: true,
+            features: ["Performance", "Graphics", "Storage"],
+            brands: ["Razer", "Alienware", "MSI"]
+        }
+    }
 };
 
 const outputFile = './swagger_output.json';
-const endpointsFiles = [
-    './routes/products.js',
-    './routes/categories.js',
-    './routes/general.js',
-];
+const endpointsFiles = ['./server.js'];
 
 swaggerAutogen()(outputFile, endpointsFiles, doc);

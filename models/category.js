@@ -1,14 +1,30 @@
-import mongoose from 'mongoose'; // Import mongoose
+import mongoose from 'mongoose';
 
 const categorySchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    description: { type: String, required: true },
-    isActive: { type: Boolean, default: true },
-    parentCategory: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
+    name: { 
+        type: String, 
+        required: [true, 'Category name is required'],
+        trim: true,
+        unique: true
+    },
+    description: { 
+        type: String, 
+        required: [true, 'Description is required'],
+        trim: true 
+    },
+    isActive: { 
+        type: Boolean, 
+        default: true 
+    },
     features: [String],
-    brands: [String]
+    brands: [String],
+    parentCategory: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Category',
+        default: null
+    }
 }, {
     timestamps: true
-}); // Create a category schema
+});
 
-export default mongoose.model('Category', categorySchema); // Export the Category model
+export default mongoose.model('Category', categorySchema);

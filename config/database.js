@@ -1,17 +1,29 @@
-// Purpose: To connect to the database
-import mongoose from 'mongoose'; // Import mongoose
-import dotenv from 'dotenv'; // Import dotenv
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
-dotenv.config(); // Load the .env file
+dotenv.config();
 
 const connectDB = async () => {
     try {
-        await mongoose.connect(process.env.MONGODB_URI);
-        console.log('MongoDB Connected');
+        const conn = await mongoose.connect(process.env.MONGODB_URI, {
+            serverSelectionTimeoutMS: 5000,
+            socketTimeoutMS: 45000,
+        });
+
+        console.log(`MongoDB Connected: ${conn.connection.host}`);
+        
+        mongoose.connection.on('error', err => {
+            console.error('MongoDB connection error:', err);
+        });
+
+        mongoose.connection.on('disconnected', () => {
+            console.warn('MongoDB disconnected. Attempting to reconnect...');
+        });
+
     } catch (error) {
-        console.error('MongoDB connection error:', error);
+        console.error('Failed to connect to MongoDB:', error.message);
         process.exit(1);
     }
-}; // Function to connect to the database
+};
 
-export default connectDB; // Export the function so it can be used in other files
+export default connectDB;

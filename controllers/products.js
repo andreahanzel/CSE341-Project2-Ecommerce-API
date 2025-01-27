@@ -1,14 +1,14 @@
-import Product from '../models/product.js'; // Import the Product model
-import { validationResult } from 'express-validator'; // Import the validationResult function from express-validator
+import Product from '../models/product.js';
+import { validationResult } from 'express-validator';
 
 export const getAllProducts = async (req, res) => {
     try {
         const products = await Product.find();
         res.json(products);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: 'Error retrieving products', error: error.message });
     }
-}; // Function to get all products
+};
 
 export const getProductById = async (req, res) => {
     try {
@@ -18,10 +18,12 @@ export const getProductById = async (req, res) => {
         }
         res.json(product);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        if (error.name === 'CastError') {
+            return res.status(400).json({ message: 'Invalid product ID format' });
+        }
+        res.status(500).json({ message: 'Error retrieving product', error: error.message });
     }
-}; // Function to get a product by ID
-
+};
 
 export const createProduct = async (req, res) => {
     const errors = validationResult(req);
@@ -34,11 +36,19 @@ export const createProduct = async (req, res) => {
         const newProduct = await product.save();
         res.status(201).json(newProduct);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        if (error.code === 11000) {
+            return res.status(400).json({ message: 'SKU already exists' });
+        }
+        res.status(400).json({ message: 'Error creating product', error: error.message });
     }
-}; // Function to create a product
+};
 
 export const updateProduct = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
     try {
         const product = await Product.findByIdAndUpdate(
             req.params.id,
@@ -50,9 +60,15 @@ export const updateProduct = async (req, res) => {
         }
         res.json(product);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        if (error.name === 'CastError') {
+            return res.status(400).json({ message: 'Invalid product ID format' });
+        }
+        if (error.code === 11000) {
+            return res.status(400).json({ message: 'SKU already exists' });
+        }
+        res.status(400).json({ message: 'Error updating product', error: error.message });
     }
-}; // Function to update a product
+};
 
 export const deleteProduct = async (req, res) => {
     try {
@@ -60,9 +76,11 @@ export const deleteProduct = async (req, res) => {
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
-        res.json({ message: 'Product deleted' });
+        res.json({ message: 'Product deleted successfully' });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        if (error.name === 'CastError') {
+            return res.status(400).json({ message: 'Invalid product ID format' });
+        }
+        res.status(500).json({ message: 'Error deleting product', error: error.message });
     }
-}; // Function to delete a product
-
+};

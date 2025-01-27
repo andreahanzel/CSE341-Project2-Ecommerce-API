@@ -1,5 +1,8 @@
-### Get All Products
-GET http://localhost:3000/api
+### Get All Items by Collection Type
+GET http://localhost:3000/api?collection=products
+
+### Get All Items by Collection Type
+GET http://localhost:3000/api?collection=categories
 
 ### Get All Products
 GET http://localhost:3000/api/products
@@ -7,10 +10,10 @@ GET http://localhost:3000/api/products
 ### Get All Categories
 GET http://localhost:3000/api/categories
 
-### Get Product by ID Products
+### Get Product by ID
 GET http://localhost:3000/api/products/67953bf897f9f01aac2a9d7d
 
-### Get Product by ID Categories
+### Get Category by ID
 GET http://localhost:3000/api/categories/67953c5697f9f01aac2a9d8c
 
 ### Create Product
@@ -46,7 +49,6 @@ Content-Type: application/json
     "brands": ["Razer", "Alienware", "MSI"]
 }
 
-
 ### Update Product
 PUT http://localhost:3000/api/products/67953bf897f9f01aac2a9d7d
 Content-Type: application/json
@@ -57,7 +59,7 @@ Content-Type: application/json
     "description": "Latest Apple smartphone with A17 chip",
     "category": "Smartphones",
     "brand": "Apple",
-    "stock":120,
+    "stock": 120,
     "SKU": "IPH15P-256-BLB"
 }
 
@@ -71,14 +73,8 @@ Content-Type: application/json
     "isActive": true
 }
 
-### Delete Product 
+### Delete Product
 DELETE http://localhost:3000/api/products/67953c0897f9f01aac2a9d7f
 
-
-{
-    "name": "Gaming Gear",
-    "description": "Updated gaming devices and accessories"
-}
-
-### Delete Category 
+### Delete Category
 DELETE http://localhost:3000/api/categories/67953c3e97f9f01aac2a9d88

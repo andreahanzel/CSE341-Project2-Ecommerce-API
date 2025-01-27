@@ -1,137 +1,138 @@
-import express from 'express'; // Import the express library
-import { getAllProducts, getProductById, createProduct, updateProduct, deleteProduct } from '../controllers/products.js'; // Import the product controller functions
-import { validateProduct } from '../middleware/validation.js'; // Import the validateProduct function
+// routes/products.js 
+import express from 'express';
+import { getAllProducts, getProductById, createProduct, updateProduct, deleteProduct } from '../controllers/products.js';
+import { validateProduct } from '../middleware/validation.js';
 
-const router = express.Router(); // Create a new router
+const router = express.Router();
+
+/**
+ * @swagger
+ * /api/products:
+ *   get:
+ *     tags: [Products]
+ *     summary: Get all products
+ *     responses:
+ *       200:
+ *         description: List of all products
+ */
 
 /**
  * @swagger
  * /api/products:
  *   post:
+ *     tags: [Products]
  *     summary: Create a new product
- *     parameters:
- *       - in: query
- *         name: type
- *         required: true
- *         description: Choose "products" to create a product
- *         schema:
- *           type: string
- *           enum:
- *             - products
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - name
- *               - price
- *               - category
- *             properties:
- *               name:
- *                 type: string
- *                 description: Name of the product
- *               price:
- *                 type: number
- *                 description: Price of the product
- *               description:
- *                 type: string
- *                 description: Product description
- *               category:
- *                 type: string
- *                 description: Product category
- *               brand:
- *                 type: string
- *                 description: Product brand
- *               stock:
- *                 type: integer
- *                 description: Stock quantity
- *               SKU:
- *                 type: string
- *                 description: Stock-keeping unit identifier
+ *             $ref: '#/components/schemas/Product'
  *     responses:
  *       201:
- *         description: Product successfully created
+ *         description: Product created
  *       400:
- *         description: Invalid input
+ *         description: Bad Request
+ * 
+ * components:
+ *   schemas:
+ *     Product:
+ *       type: object
+ *       required:
+ *         - name
+ *         - price
+ *         - description
+ *         - category
+ *         - brand
+ *         - stock
+ *         - SKU
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: Product name
+ *           example: "Gaming Laptop"
+ *         price:
+ *           type: number
+ *           description: Product price
+ *           example: 1299.99
+ *         description:
+ *           type: string
+ *           description: Product description
+ *           example: "High-performance gaming laptop"
+ *         category:
+ *           type: string
+ *           description: Product category
+ *           example: "Laptops"
+ *         brand:
+ *           type: string
+ *           description: Product brand
+ *           example: "Dell"
+ *         stock:
+ *           type: integer
+ *           description: Stock quantity
+ *           example: 50
+ *         SKU:
+ *           type: string
+ *           description: Unique SKU identifier
+ *           example: "GL-2024-001"
+ *         specifications:
+ *           type: object
+ *           description: Product specifications
+ *           example:
+ *             processor: "Intel i9"
+ *             ram: "32GB"
+ *             storage: "1TB SSD"
+ *         warranty:
+ *           type: string
+ *           description: Warranty information
+ *           example: "2 years"
+ *         inStock:
+ *           type: boolean
+ *           description: Stock availability
+ *           example: true
  */
-
-
 
 /**
  * @swagger
  * /api/products/{id}:
- *   get:
- *     summary: Retrieve a product by ID
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: The product ID
- *     responses:
- *       200:
- *         description: Product details
- *       404:
- *         description: Product not found
  *   put:
- *     summary: Update a product by ID
+ *     tags: [Products]
+ *     summary: Update a product
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: The product ID
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *               price:
- *                 type: number
- *               description:
- *                 type: string
- *               category:
- *                 type: string
- *               brand:
- *                 type: string
- *               stock:
- *                 type: integer
- *               SKU:
- *                 type: string
+ *             $ref: '#/components/schemas/Product'
  *     responses:
  *       200:
- *         description: Product successfully updated
- *       404:
- *         description: Product not found
+ *         description: Product updated
+ *       400:
+ *         description: Bad Request
  *   delete:
- *     summary: Delete a product by ID
+ *     tags: [Products]
+ *     summary: Delete a product
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: The product ID
  *     responses:
  *       200:
- *         description: Product successfully deleted
- *       404:
- *         description: Product not found
+ *         description: Product deleted
  */
 
+router.get('/', getAllProducts);
+router.get('/:id', getProductById);
+router.post('/', validateProduct, createProduct);
+router.put('/:id', validateProduct, updateProduct);
+router.delete('/:id', deleteProduct);
 
-router.get('/', getAllProducts); // GET request for all products
-router.get('/:id', getProductById); // GET request for a product by ID
-router.post('/', validateProduct, createProduct); // POST request to create a product
-router.put('/:id', validateProduct, updateProduct); // PUT request to update a product
-router.delete('/:id', deleteProduct); // DELETE request to delete a product
-
-export default router; // Export the router
+export default router;

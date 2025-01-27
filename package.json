@@ -12,7 +12,12 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write '**/*.{js,jsx,mjs,cjs,json,md}'"
   },
-  "keywords": ["web-services", "express", "nodejs", "project"],
+  "keywords": [
+    "web-services",
+    "express",
+    "nodejs",
+    "project"
+  ],
   "author": "Andrea Toreki",
   "license": "ISC",
   "dependencies": {
@@ -22,8 +27,7 @@
     "express-validator": "^7.2.1",
     "mongodb": "^6.12.0",
     "mongoose": "^8.9.5",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "swagger-autogen": "^2.23.7",
     "swagger-ui-express": "^5.0.1",
     "yamljs": "^0.3.0"
   },
@@ -35,7 +39,6 @@
     "eslint-plugin-react": "^7.37.4",
     "globals": "^15.14.0",
     "nodemon": "^3.1.9",
-    "prettier": "^3.4.2",
-    "swagger-autogen": "^2.23.7"
+    "prettier": "^3.4.2"
   }
 }

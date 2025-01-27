@@ -1,14 +1,14 @@
-import Category from '../models/category.js'; // Import the Category model
-import { validationResult } from 'express-validator'; // Import the validationResult function from express-validator
+import Category from '../models/category.js';
+import { validationResult } from 'express-validator';
 
 export const getAllCategories = async (req, res) => {
     try {
         const categories = await Category.find();
         res.json(categories);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: 'Error retrieving categories', error: error.message });
     }
-}; // Function to get all categories
+};
 
 export const getCategoryById = async (req, res) => {
     try {
@@ -18,9 +18,12 @@ export const getCategoryById = async (req, res) => {
         }
         res.json(category);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        if (error.name === 'CastError') {
+            return res.status(400).json({ message: 'Invalid category ID format' });
+        }
+        res.status(500).json({ message: 'Error retrieving category', error: error.message });
     }
-}; // Function to get a category by ID
+};
 
 export const createCategory = async (req, res) => {
     const errors = validationResult(req);
@@ -33,11 +36,19 @@ export const createCategory = async (req, res) => {
         const newCategory = await category.save();
         res.status(201).json(newCategory);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        if (error.code === 11000) {
+            return res.status(400).json({ message: 'Category name already exists' });
+        }
+        res.status(400).json({ message: 'Error creating category', error: error.message });
     }
-}; // Function to create a category
+};
 
 export const updateCategory = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
     try {
         const category = await Category.findByIdAndUpdate(
             req.params.id,
@@ -49,9 +60,12 @@ export const updateCategory = async (req, res) => {
         }
         res.json(category);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        if (error.name === 'CastError') {
+            return res.status(400).json({ message: 'Invalid category ID format' });
+        }
+        res.status(400).json({ message: 'Error updating category', error: error.message });
     }
-}; // Function to update a category
+};
 
 export const deleteCategory = async (req, res) => {
     try {
@@ -59,9 +73,11 @@ export const deleteCategory = async (req, res) => {
         if (!category) {
             return res.status(404).json({ message: 'Category not found' });
         }
-        res.json({ message: 'Category deleted' });
+        res.json({ message: 'Category deleted successfully' });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        if (error.name === 'CastError') {
+            return res.status(400).json({ message: 'Invalid category ID format' });
+        }
+        res.status(500).json({ message: 'Error deleting category', error: error.message });
     }
-}; // Function to delete a category
-
+};

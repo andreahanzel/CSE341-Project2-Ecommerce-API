@@ -5,18 +5,43 @@
     "description": "API for managing e-commerce products and categories",
     "version": "1.0.0"
   },
-  "host": "cse341-ecommerce-api.onrender.com",
-  "basePath": "/api",
+  "host": "localhost:3000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "General",
+      "description": "General collection operations"
+    },
+    {
+      "name": "Products",
+      "description": "Product management endpoints"
+    },
+    {
+      "name": "Categories",
+      "description": "Category management endpoints"
+    }
+  ],
   "schemes": [
+    "http",
     "https"
   ],
   "paths": {
     "/": {
       "get": {
         "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/": {
+      "get": {
+        "description": "",
         "parameters": [
           {
-            "name": "type",
+            "name": "collection",
             "in": "query",
             "type": "string"
           }
@@ -32,40 +57,33 @@
             "description": "Internal Server Error"
           }
         }
+      }
+    },
+    "/api/products/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       },
       "post": {
         "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "example": "any"
-                },
-                "data": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
         "responses": {
           "201": {
             "description": "Created"
           },
           "400": {
             "description": "Bad Request"
-          },
-          "500": {
-            "description": "Internal Server Error"
           }
         }
       }
     },
-    "/{id}": {
+    "/api/products/{id}": {
       "get": {
         "description": "",
         "parameters": [
@@ -79,6 +97,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "404": {
             "description": "Not Found"
@@ -124,6 +145,107 @@
           "200": {
             "description": "OK"
           },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/categories/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/api/categories/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
           "404": {
             "description": "Not Found"
           },
@@ -134,86 +256,75 @@
       }
     }
   },
-  "components": {
-    "schemas": {
-      "Product": {
-        "type": "object",
-        "required": [
-          "name",
-          "price",
-          "category"
-        ],
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "price": {
-            "type": "number"
-          },
-          "description": {
-            "type": "string"
-          },
-          "category": {
-            "type": "string"
-          },
-          "brand": {
-            "type": "string"
-          },
-          "stock": {
-            "type": "integer"
-          },
-          "SKU": {
-            "type": "string"
-          },
-          "specifications": {
-            "type": "object",
-            "properties": {
-              "processor": {
-                "type": "string"
-              },
-              "ram": {
-                "type": "string"
-              },
-              "storage": {
-                "type": "string"
-              }
-            }
-          },
-          "warranty": {
-            "type": "string"
-          },
-          "inStock": {
-            "type": "boolean"
-          }
+  "definitions": {
+    "Product": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Gaming Laptop"
+        },
+        "price": {
+          "type": "number",
+          "example": 1299.99
+        },
+        "description": {
+          "type": "string",
+          "example": "High-performance gaming laptop"
+        },
+        "category": {
+          "type": "string",
+          "example": "Laptops"
+        },
+        "brand": {
+          "type": "string",
+          "example": "Dell"
+        },
+        "stock": {
+          "type": "number",
+          "example": 50
+        },
+        "SKU": {
+          "type": "string",
+          "example": "GL-2024-001"
         }
-      },
-      "Category": {
-        "type": "object",
-        "required": [
-          "name",
-          "description"
-        ],
-        "properties": {
-          "name": {
+      }
+    },
+    "Category": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Gaming"
+        },
+        "description": {
+          "type": "string",
+          "example": "Gaming devices and accessories"
+        },
+        "isActive": {
+          "type": "boolean",
+          "example": true
+        },
+        "features": {
+          "type": "array",
+          "example": [
+            "Performance",
+            "Graphics",
+            "Storage"
+          ],
+          "items": {
             "type": "string"
-          },
-          "description": {
+          }
+        },
+        "brands": {
+          "type": "array",
+          "example": [
+            "Razer",
+            "Alienware",
+            "MSI"
+          ],
+          "items": {
             "type": "string"
-          },
-          "isActive": {
-            "type": "boolean"
-          },
-          "features": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "brands": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
           }
         }
       }
