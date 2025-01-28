@@ -19,9 +19,8 @@
         "produces": ["application/json"],
         "responses": {
           "200": { "description": "OK" },
-          "500": { "description": "Internal Server Error" },
-          "400": { "description": "Bad Request" }
-
+          "500": { "description": "Internal Server Error" }
+          
         }
       },
       "post": {
@@ -184,16 +183,16 @@
             "schema": {
               "type": "object",
               "properties": {
-                "name": { "type": "string", "example": "Gaming" },
-                "description": { "type": "string", "example": "Gaming devices and accessories" },
-                "isActive": { "type": "boolean", "example": true },
+                "name": { "example": "Gaming" },
+                "description": { "example": "Gaming devices and accessories" },
+                "isActive": { "example": true },
                 "features": {
                   "type": "array",
-                  "items": { "type": "string", "example": "Razer" }
+                  "items": { "type": "Performance" }
                 },
                 "brands": {
                   "type": "array",
-                  "items": { "type": "string", "example": "Razer" }
+                  "items": { "type": "Razer" }
                 }
               }
             }
