@@ -37,7 +37,15 @@
                 "category": { "example": "Laptops" },
                 "brand": { "example": "Dell" },
                 "stock": { "example": 50 },
-                "SKU": { "example": "GL-2024-001" }
+                "SKU": { "example": "GL-2024-001" },
+                "specifications": {
+                  "type": "object",
+                  "properties": {
+                    "processor": { "example": "Intel i7" },
+                    "RAM": { "example": "16GB" },
+                    "storage": { "example": "512GB SSD" }
+                  }
+                }
               }
             }
           }
@@ -71,8 +79,20 @@
             "schema": {
               "type": "object",
               "properties": {
-                "name": { "example": "Updated Product" },
-                "price": { "example": 999.99 }
+                "name": { "example": "Gaming Laptop" },
+                "price": { "example": 1299.99 },
+                "category": { "example": "Laptops" },
+                "brand": { "example": "Dell" },
+                "stock": { "example": 50 },
+                "SKU": { "example": "GL-2024-001" },
+                "specifications": {
+                  "type": "object",
+                  "properties": {
+                    "processor": { "example": "Intel i7" },
+                    "RAM": { "example": "16GB" },
+                    "storage": { "example": "512GB SSD" }
+                  }
+                }
               }
             }
           }
@@ -117,7 +137,16 @@
               "type": "object",
               "properties": {
                 "name": { "example": "Gaming" },
-                "description": { "example": "Gaming devices and accessories" }
+                "description": { "example": "Gaming devices and accessories" },
+                "isActive": { "example": true },
+                "features": {
+                  "type": "array",
+                  "items": { "type": "Performance" }
+                },
+                "brands": {
+                  "type": "array",
+                  "items": { "type": "Razer" }
+                }
               }
             }
           }
@@ -151,8 +180,17 @@
             "schema": {
               "type": "object",
               "properties": {
-                "name": { "example": "Updated Category" },
-                "description": { "example": "Updated description" }
+                "name": { "example": "Gaming" },
+                "description": { "example": "Gaming devices and accessories" },
+                "isActive": { "example": true },
+                "features": {
+                  "type": "array",
+                  "items": { "type": "Performance" }
+                },
+                "brands": {
+                  "type": "array",
+                  "items": { "type": "Razer" }
+                }
               }
             }
           }
