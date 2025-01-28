@@ -3,7 +3,7 @@ import productsController from '../controllers/products.js'; // Controller for p
 import { productValidationRules, validate } from '../middleware/validation.js'; // Validation rules and middleware
 import BaseError from '../helpers/baseError.js'; // Error handling class
 
-const router = express.Router();
+const router = express.Router(); // Router for product-related routes
 
 /**
  * @swagger

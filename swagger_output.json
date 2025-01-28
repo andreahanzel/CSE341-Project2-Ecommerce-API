@@ -19,7 +19,9 @@
         "produces": ["application/json"],
         "responses": {
           "200": { "description": "OK" },
-          "500": { "description": "Internal Server Error" }
+          "500": { "description": "Internal Server Error" },
+          "400": { "description": "Bad Request" }
+
         }
       },
       "post": {
@@ -32,18 +34,18 @@
             "schema": {
               "type": "object",
               "properties": {
-                "name": { "example": "Gaming Laptop" },
-                "price": { "example": 1299.99 },
-                "category": { "example": "Laptops" },
-                "brand": { "example": "Dell" },
-                "stock": { "example": 50 },
-                "SKU": { "example": "GL-2024-001" },
+                "name": { "type": "string", "example": "Gaming Laptop" },
+                "price": { "type": "number", "example": 1299.99 },
+                "category": { "type": "string", "example": "Laptops" },
+                "brand": { "type": "string", "example": "Dell" },
+                "stock": { "type": "integer", "example": 50 },
+                "SKU": { "type": "string", "example": "GL-2024-001" },
                 "specifications": {
                   "type": "object",
                   "properties": {
-                    "processor": { "example": "Intel i7" },
-                    "RAM": { "example": "16GB" },
-                    "storage": { "example": "512GB SSD" }
+                    "processor": { "type": "string", "example": "Intel i7" },
+                    "RAM": { "type": "string", "example": "16GB" },
+                    "storage": { "type": "string", "example": "512GB SSD" }
                   }
                 }
               }
@@ -52,7 +54,8 @@
         ],
         "responses": {
           "201": { "description": "Created" },
-          "500": { "description": "Internal Server Error" }
+          "500": { "description": "Internal Server Error" },
+          "400": { "description": "Bad Request - Invalid Input" }
         }
       }
     },
@@ -79,18 +82,18 @@
             "schema": {
               "type": "object",
               "properties": {
-                "name": { "example": "Gaming Laptop" },
-                "price": { "example": 1299.99 },
-                "category": { "example": "Laptops" },
-                "brand": { "example": "Dell" },
-                "stock": { "example": 50 },
-                "SKU": { "example": "GL-2024-001" },
+                "name": { "type": "string", "example": "Gaming Laptop" },
+                "price": { "type": "number", "example": 1299.99 },
+                "category": { "type": "string", "example": "Laptops" },
+                "brand": { "type": "string", "example": "Dell" },
+                "stock": { "type": "integer", "example": 50 },
+                "SKU": { "type": "string", "example": "GL-2024-001" },
                 "specifications": {
                   "type": "object",
                   "properties": {
-                    "processor": { "example": "Intel i7" },
-                    "RAM": { "example": "16GB" },
-                    "storage": { "example": "512GB SSD" }
+                    "processor": { "type": "string", "example": "Intel i7" },
+                    "RAM": { "type": "string", "example": "16GB" },
+                    "storage": { "type": "string", "example": "512GB SSD" }
                   }
                 }
               }
@@ -136,16 +139,16 @@
             "schema": {
               "type": "object",
               "properties": {
-                "name": { "example": "Gaming" },
-                "description": { "example": "Gaming devices and accessories" },
-                "isActive": { "example": true },
+                "name": { "type": "string", "example": "Gaming" },
+                "description": { "type": "string", "example": "Gaming devices and accessories" },
+                "isActive": { "type": "boolean", "example": true },
                 "features": {
                   "type": "array",
-                  "items": { "type": "Performance" }
+                  "items": { "type": "string", "example": "Razer" }
                 },
                 "brands": {
                   "type": "array",
-                  "items": { "type": "Razer" }
+                  "items": { "type": "string", "example": "Razer" }
                 }
               }
             }
@@ -153,7 +156,8 @@
         ],
         "responses": {
           "201": { "description": "Created" },
-          "500": { "description": "Internal Server Error" }
+          "500": { "description": "Internal Server Error" },
+          "400": { "description": "Bad Request - Invalid Input" }
         }
       }
     },
@@ -180,16 +184,16 @@
             "schema": {
               "type": "object",
               "properties": {
-                "name": { "example": "Gaming" },
-                "description": { "example": "Gaming devices and accessories" },
-                "isActive": { "example": true },
+                "name": { "type": "string", "example": "Gaming" },
+                "description": { "type": "string", "example": "Gaming devices and accessories" },
+                "isActive": { "type": "boolean", "example": true },
                 "features": {
                   "type": "array",
-                  "items": { "type": "Performance" }
+                  "items": { "type": "string", "example": "Razer" }
                 },
                 "brands": {
                   "type": "array",
-                  "items": { "type": "Razer" }
+                  "items": { "type": "string", "example": "Razer" }
                 }
               }
             }

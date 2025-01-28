@@ -12,8 +12,10 @@ const doc = {
   schemes: ['http', 'https']
 }; //Swagger documentation configuration
 
-const outputFile = './swagger_output.json';
-const endpointsFiles = ['./routes/products.js', './routes/categories.js'];
+const outputFile = './swagger_output.json'; //Output file for Swagger documentation
+const endpointsFiles = ['./routes/products.js', './routes/categories.js']; // Files to include in Swagger documentation
+
+//Generate Swagger documentation
 
 swaggerAutogen()(outputFile, endpointsFiles, doc).then(async () => {
   // Import server.js dynamically

@@ -17,4 +17,4 @@ try {
 // Mount the Swagger UI at /api-docs
 router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-export default router;
+export default router; // Export the router
