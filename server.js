@@ -1,51 +1,32 @@
-// server.js update
 import express from 'express';
-import dotenv from 'dotenv';
-import cors from 'cors';
-import swaggerUi from 'swagger-ui-express';
-import fs from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import connectDB from './config/database.js';
-import productRoutes from './routes/products.js';
-import categoryRoutes from './routes/categories.js';
-import generalRoutes from './routes/general.js';
-import { errorHandler } from './middleware/errorHandler.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const swaggerDocument = JSON.parse(fs.readFileSync('./swagger_output.json', 'utf8'));
-
-dotenv.config();
+import { initDb } from './config/database.js';
+import bodyParser from 'body-parser'; // Import the entire package
+import router from './routes/index.js'; // .js is included
+import { errorHandler } from './middleware/errorHandler.js'; // Added this import
 const app = express();
+const port = process.env.PORT || 3000;
 
-// Connect to MongoDB
-await connectDB();
-
-// Middleware
-app.use(cors());
-app.use(express.json());
-
-// Routes
-app.get('/', (req, res) => {
-    res.json({ message: 'Welcome to E-commerce API' });
+app.use(bodyParser.json()); // Use .json() method from the imported package
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Z-Key'
+  );
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  next();
 });
+app.use('/', router);
 
-// API routes
-app.use('/api', generalRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/categories', categoryRoutes);
-
-// Swagger documentation
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
-    swaggerOptions: {
-        docExpansion: 'none',
-        persistAuthorization: true
-    }
-}));
-
-// Error handling
+// Added error handling middleware AFTER all other middleware and routes
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+initDb((err) => {
+  if (err) {
+    console.log(err);
+  } else {
+    app.listen(port, () => {
+      console.log(`Database is listening and node running on port ${port}`);
+    });
+  }
+});

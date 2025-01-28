@@ -1,83 +1,96 @@
-// routes/categories.js
 import express from 'express';
-import { getAllCategories, getCategoryById, createCategory, updateCategory, deleteCategory } from '../controllers/categories.js';
-import { validateCategory } from '../middleware/validation.js';
+import categoriesController from '../controllers/categories.js';
+import { categoryValidationRules, validate } from '../middleware/validation.js';
+import BaseError from '../helpers/baseError.js';
 
 const router = express.Router();
 
 /**
  * @swagger
- * /api/categories:
+ * /:
  *   get:
- *     tags: [Categories]
- *     summary: Get all categories
+ *     tags:
+ *       - Categories
+ *     summary: Retrieve all categories
+ *     description: Retrieve a list of all categories.
  *     responses:
  *       200:
- *         description: List of all categories
- */
-
-/**
- * @swagger
- * /api/categories:
+ *         description: A list of categories
+ *       500:
+ *         description: Internal Server Error
  *   post:
- *     tags: [Categories]
+ *     tags:
+ *       - Categories
  *     summary: Create a new category
+ *     description: Add a new category to the database.
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Category'
+ *             type: object
+ *             required:
+ *               - name
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               isActive:
+ *                 type: boolean
+ *               parentCategory:
+ *                 type: string
+ *               features:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               brands:
+ *                 type: array
+ *                 items:
+ *                   type: string
  *     responses:
  *       201:
  *         description: Category created
- *       400:
- *         description: Bad Request
- * 
- * components:
- *   schemas:
- *     Category:
- *       type: object
- *       required:
- *         - name
- *         - description
- *       properties:
- *         name:
- *           type: string
- *           description: Category name
- *           example: "Gaming"
- *         description:
- *           type: string
- *           description: Category description
- *           example: "Gaming devices and accessories"
- *         isActive:
- *           type: boolean
- *           description: Category status
- *           example: true
- *         features:
- *           type: array
- *           items:
- *             type: string
- *           description: Category features
- *           example: ["Performance", "Graphics", "Storage"]
- *         brands:
- *           type: array
- *           items:
- *             type: string
- *           description: Associated brands
- *           example: ["Razer", "Alienware", "MSI"]
+ *       500:
+ *         description: Internal Server Error
  */
+router.get('/', categoriesController.getAll);
+router.post('/', categoryValidationRules(), validate, categoriesController.createCategory);
 
 /**
  * @swagger
- * /api/categories/{id}:
- *   put:
- *     tags: [Categories]
- *     summary: Update a category
+ * /{id}:
+ *   get:
+ *     tags:
+ *       - Categories
+ *     summary: Retrieve a category by ID
+ *     description: Retrieve a single category using its unique ID.
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
+ *         description: The unique ID of the category
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: A single category
+ *       400:
+ *         description: Invalid ID format
+ *       404:
+ *         description: Category not found
+ *       500:
+ *         description: Internal Server Error
+ *   put:
+ *     tags:
+ *       - Categories
+ *     summary: Update a category by ID
+ *     description: Update a category's information using its unique ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The unique ID of the category
  *         schema:
  *           type: string
  *     requestBody:
@@ -85,30 +98,69 @@ const router = express.Router();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Category'
+ *             type: object
+ *             required:
+ *               - name
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               isActive:
+ *                 type: boolean
+ *               parentCategory:
+ *                 type: string
+ *               features:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               brands:
+ *                 type: array
+ *                 items:
+ *                   type: string
  *     responses:
  *       200:
  *         description: Category updated
  *       400:
- *         description: Bad Request
+ *         description: Invalid ID format
+ *       404:
+ *         description: Category not found
+ *       500:
+ *         description: Internal Server Error
  *   delete:
- *     tags: [Categories]
- *     summary: Delete a category
+ *     tags:
+ *       - Categories
+ *     summary: Delete a category by ID
+ *     description: Delete a category using its unique ID.
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
+ *         description: The unique ID of the category
  *         schema:
  *           type: string
  *     responses:
- *       200:
- *         description: Category deleted
+ *       204:
+ *         description: Category deleted successfully
+ *       400:
+ *         description: Invalid ID format
+ *       404:
+ *         description: Category not found
+ *       500:
+ *         description: Internal Server Error
  */
+router.get('/:id', async (req, res, next) => {
+  try {
+    if (!req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
+      throw new BaseError('ValidationError', 400, true, 'Invalid category ID format');
+    }
+    await categoriesController.getSingle(req, res, next);
+  } catch (err) {
+    next(err);
+  }
+});
 
-router.get('/', getAllCategories);
-router.get('/:id', getCategoryById);
-router.post('/', validateCategory, createCategory);
-router.put('/:id', validateCategory, updateCategory);
-router.delete('/:id', deleteCategory);
+router.put('/:id', categoryValidationRules(), validate, categoriesController.updateCategory);
+router.delete('/:id', categoriesController.deleteCategory);
 
 export default router;

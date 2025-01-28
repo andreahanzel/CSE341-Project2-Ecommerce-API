@@ -1,331 +1,178 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "E-commerce API",
-    "description": "API for managing e-commerce products and categories",
+    "title": "Ecommerce API",
+    "description": "API for managing products and categories",
     "version": "1.0.0"
   },
   "host": "localhost:3000",
   "basePath": "/",
-  "tags": [
-    {
-      "name": "General",
-      "description": "General collection operations"
-    },
-    {
-      "name": "Products",
-      "description": "Product management endpoints"
-    },
-    {
-      "name": "Categories",
-      "description": "Category management endpoints"
-    }
-  ],
   "schemes": [
     "http",
     "https"
   ],
   "paths": {
-    "/": {
+    "/products": {
       "get": {
-        "description": "",
+        "tags": ["Products"],
+        "description": "Retrieve all products",
+        "produces": ["application/json"],
         "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "collection",
-            "in": "query",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/products/": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": { "description": "OK" },
+          "500": { "description": "Internal Server Error" }
         }
       },
       "post": {
-        "description": "",
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      }
-    },
-    "/api/products/{id}": {
-      "get": {
-        "description": "",
+        "tags": ["Products"],
+        "description": "Create a new product",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": { "example": "Gaming Laptop" },
+                "price": { "example": 1299.99 },
+                "category": { "example": "Laptops" },
+                "brand": { "example": "Dell" },
+                "stock": { "example": 50 },
+                "SKU": { "example": "GL-2024-001" }
+              }
+            }
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "201": { "description": "Created" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "tags": ["Products"],
+        "description": "Retrieve a product by ID",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "string" }],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
         }
       },
       "put": {
-        "description": "",
+        "tags": ["Products"],
+        "description": "Update a product by ID",
         "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "string" },
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": { "example": "Updated Product" },
+                "price": { "example": 999.99 }
+              }
+            }
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          }
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
         }
       },
       "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "tags": ["Products"],
+        "description": "Delete a product by ID",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "string" }],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
         }
       }
     },
-    "/api/categories/": {
+    "/categories": {
       "get": {
-        "description": "",
+        "tags": ["Categories"],
+        "description": "Retrieve all categories",
+        "produces": ["application/json"],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": { "description": "OK" },
+          "500": { "description": "Internal Server Error" }
         }
       },
       "post": {
-        "description": "",
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      }
-    },
-    "/api/categories/{id}": {
-      "get": {
-        "description": "",
+        "tags": ["Categories"],
+        "description": "Create a new category",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": { "example": "Gaming" },
+                "description": { "example": "Gaming devices and accessories" }
+              }
+            }
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "201": { "description": "Created" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/categories/{id}": {
+      "get": {
+        "tags": ["Categories"],
+        "description": "Retrieve a category by ID",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "string" }],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
         }
       },
       "put": {
-        "description": "",
+        "tags": ["Categories"],
+        "description": "Update a category by ID",
         "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "string" },
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": { "example": "Updated Category" },
+                "description": { "example": "Updated description" }
+              }
+            }
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          }
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
         }
       },
       "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "tags": ["Categories"],
+        "description": "Delete a category by ID",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "string" }],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    }
-  },
-  "definitions": {
-    "Product": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "example": "Gaming Laptop"
-        },
-        "price": {
-          "type": "number",
-          "example": 1299.99
-        },
-        "description": {
-          "type": "string",
-          "example": "High-performance gaming laptop"
-        },
-        "category": {
-          "type": "string",
-          "example": "Laptops"
-        },
-        "brand": {
-          "type": "string",
-          "example": "Dell"
-        },
-        "stock": {
-          "type": "number",
-          "example": 50
-        },
-        "SKU": {
-          "type": "string",
-          "example": "GL-2024-001"
-        }
-      }
-    },
-    "Category": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "example": "Gaming"
-        },
-        "description": {
-          "type": "string",
-          "example": "Gaming devices and accessories"
-        },
-        "isActive": {
-          "type": "boolean",
-          "example": true
-        },
-        "features": {
-          "type": "array",
-          "example": [
-            "Performance",
-            "Graphics",
-            "Storage"
-          ],
-          "items": {
-            "type": "string"
-          }
-        },
-        "brands": {
-          "type": "array",
-          "example": [
-            "Razer",
-            "Alienware",
-            "MSI"
-          ],
-          "items": {
-            "type": "string"
-          }
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
         }
       }
     }

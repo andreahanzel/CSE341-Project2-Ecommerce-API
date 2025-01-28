@@ -1,29 +1,29 @@
-// middleware/errorHandler.js
-export const errorHandler = (err, req, res, next) => {
-    console.error(err.stack);
+import BaseError from '../helpers/baseError.js';
 
-    if (err.name === 'ValidationError') {
-        return res.status(400).json({
-            error: 'Validation Error',
-            details: Object.values(err.errors).map(error => error.message)
-        });
-    }
-
-    if (err.name === 'CastError' && err.kind === 'ObjectId') {
-        return res.status(400).json({
-            error: 'Invalid ID format'
-        });
-    }
-
-    if (err.code === 11000) {
-        return res.status(400).json({
-            error: 'Duplicate key error',
-            field: Object.keys(err.keyPattern)[0]
-        });
-    }
-
-    res.status(500).json({
-        error: 'Internal Server Error',
-        message: err.message
+export const errorHandler = (err, req, res, _next) => {
+  // If the error is operational, send it to the client
+  if (err instanceof BaseError) {
+    return res.status(err.statusCode).json({
+      status: 'error',
+      statusCode: err.statusCode,
+      message: err.message
     });
+  }
+
+  // If it's a MongoDB error
+  if (err.name === 'MongoError' && err.code === 11000) {
+    return res.status(400).json({
+      status: 'error',
+      statusCode: 400,
+      message: 'Duplicate key error'
+    });
+  }
+
+  // For any other error, send 500
+  console.error('ERROR 💥', err);
+  return res.status(500).json({
+    status: 'error',
+    statusCode: 500,
+    message: 'Something went wrong'
+  });
 };

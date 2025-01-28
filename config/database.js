@@ -1,29 +1,36 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-
 dotenv.config();
 
-const connectDB = async () => {
-    try {
-        const conn = await mongoose.connect(process.env.MONGODB_URI, {
-            serverSelectionTimeoutMS: 5000,
-            socketTimeoutMS: 45000,
-        });
+const uri = process.env.MONGODB_URI;
 
-        console.log(`MongoDB Connected: ${conn.connection.host}`);
-        
-        mongoose.connection.on('error', err => {
-            console.error('MongoDB connection error:', err);
-        });
+mongoose.connection.on('error', (err) => {
+  console.error('MongoDB connection error:', err);
+});
 
-        mongoose.connection.on('disconnected', () => {
-            console.warn('MongoDB disconnected. Attempting to reconnect...');
-        });
+mongoose.connection.once('open', () => {
+  console.log('Connected to MongoDB using Mongoose');
+});
 
-    } catch (error) {
-        console.error('Failed to connect to MongoDB:', error.message);
-        process.exit(1);
-    }
+export const connectToDatabase = async () => {
+  try {
+    await mongoose.connect(uri, {
+      dbName: 'ecommerce' // My database name
+    });
+    return mongoose.connection.db;
+  } catch (err) {
+    console.error('Database connection failed:', err.message);
+    throw new Error('Database connection failed: ' + err.message);
+  }
 };
 
-export default connectDB;
+export const initDb = async (callback) => {
+  try {
+    await mongoose.connect(uri, {
+      dbName: 'ecommerce' // My database name
+    });
+    callback(null);
+  } catch (err) {
+    callback(err);
+  }
+};

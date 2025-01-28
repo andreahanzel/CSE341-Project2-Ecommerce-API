@@ -1,80 +1,116 @@
-import { body } from 'express-validator';
+import { body, validationResult } from 'express-validator';
 
-export const validateProduct = [
-   body('name')
-       .trim()
-       .notEmpty()
-       .withMessage('Product name is required')
-       .isLength({ min: 3 })
-       .withMessage('Product name must be at least 3 characters long'),
-   body('price')
-       .isFloat({ min: 0 })
-       .withMessage('Price must be a positive number'),
-   body('description')
-       .trim()
-       .notEmpty()
-       .withMessage('Description is required'),
-   body('category')
-       .trim()
-       .notEmpty()
-       .withMessage('Category is required'),
-   body('brand')
-       .trim()
-       .notEmpty()
-       .withMessage('Brand is required'),
-   body('stock')
-       .isInt({ min: 0 })
-       .withMessage('Stock must be a positive integer'),
-   body('SKU')
-       .trim()
-       .notEmpty()
-       .withMessage('SKU is required')
-       .matches(/^[A-Za-z0-9-]+$/)
-       .withMessage('SKU must contain only letters, numbers, and hyphens'),
-   body('specifications')
-       .optional()
-       .custom(value => {
-           if (value && typeof value === 'object') {
-               return Object.values(value).every(val => typeof val === 'string');
-           }
-           return true;
-       })
-       .withMessage('Specifications must be a map of strings'),
-   body('warranty')
-       .optional()
-       .isString()
-       .withMessage('Warranty must be a string'),
-   body('inStock')
-       .optional()
-       .isBoolean()
-       .withMessage('inStock must be a boolean')
+const productValidationRules = () => [
+  body('name')
+    .trim()
+    .notEmpty()
+    .withMessage('Product name is required')
+    .isString()
+    .withMessage('Product name must be a string'),
+
+  body('price')
+    .notEmpty()
+    .withMessage('Price is required')
+    .isFloat({ gt: 0 })
+    .withMessage('Price must be a positive number'),
+
+  body('description')
+    .optional()
+    .trim()
+    .isString()
+    .withMessage('Description must be a string'),
+
+  body('category')
+    .trim()
+    .notEmpty()
+    .withMessage('Category is required')
+    .isString()
+    .withMessage('Category must be a string'),
+
+  body('brand')
+    .trim()
+    .notEmpty()
+    .withMessage('Brand is required')
+    .isString()
+    .withMessage('Brand must be a string'),
+
+  body('stock')
+    .notEmpty()
+    .withMessage('Stock quantity is required')
+    .isInt({ min: 0 })
+    .withMessage('Stock must be a non-negative integer'),
+
+  body('SKU')
+    .trim()
+    .notEmpty()
+    .withMessage('SKU is required')
+    .isString()
+    .withMessage('SKU must be a string'),
+
+  body('specifications')
+    .optional()
+    .isObject()
+    .withMessage('Specifications must be an object'),
+
+  body('inStock')
+    .optional()
+    .isBoolean()
+    .withMessage('InStock must be a boolean')
 ];
 
-export const validateCategory = [
-   body('name')
-       .trim()
-       .notEmpty()
-       .withMessage('Category name is required')
-       .isLength({ min: 2 })
-       .withMessage('Category name must be at least 2 characters long'),
-   body('description')
-       .trim()
-       .notEmpty()
-       .withMessage('Description is required'),
-   body('isActive')
-       .optional()
-       .isBoolean()
-       .withMessage('isActive must be a boolean'),
-   body('features')
-       .optional()
-       .isArray()
-       .withMessage('Features must be an array'),
-   body('brands')
-       .optional()
-       .isArray()
-       .withMessage('Brands must be an array'),
-   body('parentCategory')
-       .optional()
-       .isMongoId()
-       .withMessage('Invalid parent category ID')
+const categoryValidationRules = () => [
+  body('name')
+    .trim()
+    .notEmpty()
+    .withMessage('Category name is required')
+    .isString()
+    .withMessage('Category name must be a string'),
+
+  body('description')
+    .optional()
+    .trim()
+    .isString()
+    .withMessage('Description must be a string'),
+
+  body('isActive')
+    .optional()
+    .isBoolean()
+    .withMessage('isActive must be a boolean'),
+
+  body('parentCategory')
+    .optional()
+    .isString()
+    .withMessage('Parent category must be a string or null'),
+
+  body('features')
+    .optional()
+    .isArray()
+    .withMessage('Features must be an array of strings')
+    .custom((features) => features.every((feature) => typeof feature === 'string'))
+    .withMessage('Each feature must be a string'),
+
+  body('brands')
+    .optional()
+    .isArray()
+    .withMessage('Brands must be an array of strings')
+    .custom((brands) => brands.every((brand) => typeof brand === 'string'))
+    .withMessage('Each brand must be a string')
 ];
+
+const validate = (req, res, next) => {
+  const errors = validationResult(req);
+  if (errors.isEmpty()) {
+    return next();
+  }
+
+  const extractedErrors = errors.array().map((err) => ({
+    [err.path]: err.msg
+  }));
+
+  return res.status(400).json({
+    success: false,
+    errors: extractedErrors
+  });
+};
+
+export { productValidationRules, categoryValidationRules, validate };

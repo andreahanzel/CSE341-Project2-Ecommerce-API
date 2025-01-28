@@ -1,28 +1,13 @@
-export class BaseError extends Error {
-    constructor(message, statusCode) {
-        super(message);
-        this.statusCode = statusCode;
-        this.status = `${statusCode}`.startsWith('4') ? 'fail' : 'error';
-        this.isOperational = true;
+class BaseError extends Error {
+  constructor(name, statusCode, isOperational, description) {
+    super(description);
 
-        Error.captureStackTrace(this, this.constructor);
-    }
+    Object.setPrototypeOf(this, new.target.prototype);
+    this.name = name;
+    this.statusCode = statusCode;
+    this.isOperational = isOperational;
+    Error.captureStackTrace(this);
+  }
 }
 
-export class NotFoundError extends BaseError {
-    constructor(message) {
-        super(message || 'Resource not found', 404);
-    }
-}
-
-export class ValidationError extends BaseError {
-    constructor(message) {
-        super(message || 'Validation failed', 400);
-    }
-}
-
-export class DuplicateError extends BaseError {
-    constructor(message) {
-        super(message || 'Duplicate entry', 400);
-    }
-}
+export default BaseError;

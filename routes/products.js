@@ -1,107 +1,103 @@
-// routes/products.js 
 import express from 'express';
-import { getAllProducts, getProductById, createProduct, updateProduct, deleteProduct } from '../controllers/products.js';
-import { validateProduct } from '../middleware/validation.js';
+import productsController from '../controllers/products.js';
+import { productValidationRules, validate } from '../middleware/validation.js';
+import BaseError from '../helpers/baseError.js';
 
 const router = express.Router();
 
 /**
  * @swagger
- * /api/products:
+ * /:
  *   get:
- *     tags: [Products]
- *     summary: Get all products
+ *     tags:
+ *       - Products
+ *     summary: Retrieve all products
+ *     description: Retrieve a list of all products.
  *     responses:
  *       200:
- *         description: List of all products
- */
-
-/**
- * @swagger
- * /api/products:
+ *         description: A list of products
+ *       500:
+ *         description: Internal Server Error
  *   post:
- *     tags: [Products]
+ *     tags:
+ *       - Products
  *     summary: Create a new product
+ *     description: Add a new product to the database.
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Product'
+ *             type: object
+ *             required:
+ *               - name
+ *               - price
+ *               - category
+ *               - brand
+ *               - stock
+ *               - SKU
+ *             properties:
+ *               name:
+ *                 type: string
+ *               price:
+ *                 type: number
+ *               description:
+ *                 type: string
+ *               category:
+ *                 type: string
+ *               brand:
+ *                 type: string
+ *               stock:
+ *                 type: integer
+ *               SKU:
+ *                 type: string
+ *               specifications:
+ *                 type: object
+ *               inStock:
+ *                 type: boolean
  *     responses:
  *       201:
  *         description: Product created
- *       400:
- *         description: Bad Request
- * 
- * components:
- *   schemas:
- *     Product:
- *       type: object
- *       required:
- *         - name
- *         - price
- *         - description
- *         - category
- *         - brand
- *         - stock
- *         - SKU
- *       properties:
- *         name:
- *           type: string
- *           description: Product name
- *           example: "Gaming Laptop"
- *         price:
- *           type: number
- *           description: Product price
- *           example: 1299.99
- *         description:
- *           type: string
- *           description: Product description
- *           example: "High-performance gaming laptop"
- *         category:
- *           type: string
- *           description: Product category
- *           example: "Laptops"
- *         brand:
- *           type: string
- *           description: Product brand
- *           example: "Dell"
- *         stock:
- *           type: integer
- *           description: Stock quantity
- *           example: 50
- *         SKU:
- *           type: string
- *           description: Unique SKU identifier
- *           example: "GL-2024-001"
- *         specifications:
- *           type: object
- *           description: Product specifications
- *           example:
- *             processor: "Intel i9"
- *             ram: "32GB"
- *             storage: "1TB SSD"
- *         warranty:
- *           type: string
- *           description: Warranty information
- *           example: "2 years"
- *         inStock:
- *           type: boolean
- *           description: Stock availability
- *           example: true
+ *       500:
+ *         description: Internal Server Error
  */
+router.get('/', productsController.getAll);
+router.post('/', productValidationRules(), validate, productsController.createProduct);
 
 /**
  * @swagger
- * /api/products/{id}:
- *   put:
- *     tags: [Products]
- *     summary: Update a product
+ * /{id}:
+ *   get:
+ *     tags:
+ *       - Products
+ *     summary: Retrieve a product by ID
+ *     description: Retrieve a single product using its unique ID.
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
+ *         description: The unique ID of the product
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: A single product
+ *       400:
+ *         description: Invalid ID format
+ *       404:
+ *         description: Product not found
+ *       500:
+ *         description: Internal Server Error
+ *   put:
+ *     tags:
+ *       - Products
+ *     summary: Update a product by ID
+ *     description: Update a product's information using its unique ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The unique ID of the product
  *         schema:
  *           type: string
  *     requestBody:
@@ -109,30 +105,76 @@ const router = express.Router();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Product'
+ *             type: object
+ *             required:
+ *               - name
+ *               - price
+ *               - category
+ *               - brand
+ *               - stock
+ *               - SKU
+ *             properties:
+ *               name:
+ *                 type: string
+ *               price:
+ *                 type: number
+ *               description:
+ *                 type: string
+ *               category:
+ *                 type: string
+ *               brand:
+ *                 type: string
+ *               stock:
+ *                 type: integer
+ *               SKU:
+ *                 type: string
+ *               specifications:
+ *                 type: object
+ *               inStock:
+ *                 type: boolean
  *     responses:
  *       200:
  *         description: Product updated
  *       400:
- *         description: Bad Request
+ *         description: Invalid ID format
+ *       404:
+ *         description: Product not found
+ *       500:
+ *         description: Internal Server Error
  *   delete:
- *     tags: [Products]
- *     summary: Delete a product
+ *     tags:
+ *       - Products
+ *     summary: Delete a product by ID
+ *     description: Delete a product using its unique ID.
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
+ *         description: The unique ID of the product
  *         schema:
  *           type: string
  *     responses:
- *       200:
- *         description: Product deleted
+ *       204:
+ *         description: Product deleted successfully
+ *       400:
+ *         description: Invalid ID format
+ *       404:
+ *         description: Product not found
+ *       500:
+ *         description: Internal Server Error
  */
+router.get('/:id', async (req, res, next) => {
+  try {
+    if (!req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
+      throw new BaseError('ValidationError', 400, true, 'Invalid product ID format');
+    }
+    await productsController.getSingle(req, res, next);
+  } catch (err) {
+    next(err);
+  }
+});
 
-router.get('/', getAllProducts);
-router.get('/:id', getProductById);
-router.post('/', validateProduct, createProduct);
-router.put('/:id', validateProduct, updateProduct);
-router.delete('/:id', deleteProduct);
+router.put('/:id', productValidationRules(), validate, productsController.updateProduct);
+router.delete('/:id', productsController.deleteProduct);
 
 export default router;

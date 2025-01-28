@@ -1,30 +1,39 @@
 import mongoose from 'mongoose';
 
-const categorySchema = new mongoose.Schema({
-    name: { 
-        type: String, 
-        required: [true, 'Category name is required'],
-        trim: true,
-        unique: true
+const categorySchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, 'Category name is required'],
+      trim: true
     },
-    description: { 
-        type: String, 
-        required: [true, 'Description is required'],
-        trim: true 
+    description: {
+      type: String,
+      trim: true
     },
-    isActive: { 
-        type: Boolean, 
-        default: true 
+    isActive: {
+      type: Boolean,
+      default: true
     },
-    features: [String],
-    brands: [String],
-    parentCategory: { 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Category',
-        default: null
+    parentCategory: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Category',
+      default: null
+    },
+    features: {
+      type: [String],
+      default: []
+    },
+    brands: {
+      type: [String],
+      default: []
     }
-}, {
+  },
+  {
     timestamps: true
-});
+  }
+);
 
-export default mongoose.model('Category', categorySchema);
+const Category = mongoose.model('Category', categorySchema);
+
+export default Category;

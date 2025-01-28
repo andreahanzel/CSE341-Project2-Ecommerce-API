@@ -1,80 +1,99 @@
-### Get All Items by Collection Type
-GET http://localhost:3000/api?collection=products
+### Products
 
-### Get All Items by Collection Type
-GET http://localhost:3000/api?collection=categories
+### Get all products
+GET http://localhost:3000/products HTTP/1.1
 
-### Get All Products
-GET http://localhost:3000/api/products
+### Get a single product by ID
+GET http://localhost:3000/products/6795732730e3c92f6abbb095 HTTP/1.1
 
-### Get All Categories
-GET http://localhost:3000/api/categories
-
-### Get Product by ID
-GET http://localhost:3000/api/products/67953bf897f9f01aac2a9d7d
-
-### Get Category by ID
-GET http://localhost:3000/api/categories/67953c5697f9f01aac2a9d8c
-
-### Create Product
-POST http://localhost:3000/api/products
+### Create a new product
+POST http://localhost:3000/products/ HTTP/1.1
 Content-Type: application/json
 
 {
-    "name": "Gaming Laptop",
-    "price": 1299.99,
-    "description": "High-performance gaming laptop",
-    "category": "Laptops",
-    "brand": "Dell",
-    "stock": 50,
-    "SKU": "GL-2024-001",
-    "specifications": {
-        "processor": "Intel i9",
-        "ram": "32GB",
-        "storage": "1TB SSD"
-    },
-    "warranty": "2 years",
-    "inStock": true
+  "name": "New Product",
+  "price": 199.99,
+  "category": "Electronics",
+  "brand": "BrandX",
+  "stock": 50,
+  "SKU": "BRX-2025-001",
+  "specifications": {
+    "processor": "Intel i7",
+    "ram": "16GB",
+    "storage": "512GB SSD"
+  },
+  "inStock": true
 }
 
-### Create Category
-POST http://localhost:3000/api/categories
+### Update a product
+PUT http://localhost:3000/products/67958295c1c223da61bcb315 HTTP/1.1
 Content-Type: application/json
 
 {
-    "name": "Gaming",
-    "description": "Gaming devices and accessories",
-    "isActive": true,
-    "features": ["Performance", "Graphics", "Storage"],
-    "brands": ["Razer", "Alienware", "MSI"]
+  "name": "Updated Product",
+  "price": 249.99,
+  "category": "Electronics",
+  "brand": "BrandY",
+  "stock": 40,
+  "SKU": "BRY-2025-002"
 }
 
-### Update Product
-PUT http://localhost:3000/api/products/67953bf897f9f01aac2a9d7d
+### Delete a product
+DELETE http://localhost:3000/products/67958a4c6eefe70588584359 HTTP/1.1
+
+---
+
+### Categories
+
+### Get all categories
+GET http://localhost:3000/categories HTTP/1.1
+
+### Get a single category by ID
+GET http://localhost:3000/categories/67953c4b97f9f01aac2a9d8a HTTP/1.1
+
+### Create a new category
+POST http://localhost:3000/categories/ HTTP/1.1
 Content-Type: application/json
 
 {
-    "name": "iPhone 16 Pro",
-    "price": 1499.99,
-    "description": "Latest Apple smartphone with A17 chip",
-    "category": "Smartphones",
-    "brand": "Apple",
-    "stock": 120,
-    "SKU": "IPH15P-256-BLB"
+  "name": "Gaming",
+  "description": "Gaming devices and accessories",
+  "isActive": true,
+  "features": ["Performance", "Graphics", "Storage"],
+  "brands": ["Razer", "Alienware", "MSI"]
 }
 
-### Update Category
-PUT http://localhost:3000/api/categories/67953c3097f9f01aac2a9d86
+### Update a category
+PUT http://localhost:3000/categories/67953c5697f9f01aac2a9d8c HTTP/1.1
 Content-Type: application/json
 
 {
-    "name": "Gaming",
-    "description": "Updated gaming category description",
-    "isActive": true
+  "name": "Updated Gaming Category",
+  "description": "Updated description for gaming devices"
 }
 
-### Delete Product
-DELETE http://localhost:3000/api/products/67953c0897f9f01aac2a9d7f
+### Delete a category
+DELETE http://localhost:3000/categories/6797d03e68d9d6f210a6cb11 HTTP/1.1
 
-### Delete Category
-DELETE http://localhost:3000/api/categories/67953c3e97f9f01aac2a9d88
+---
+
+### Error Test Cases
+
+### Test Error: Get product with invalid ID format
+GET http://localhost:3000/products/123 HTTP/1.1
+
+### Test Error: Create product with missing required fields
+POST http://localhost:3000/products/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Test Product"
+}
+
+### Test Error: Create category with missing required fields
+POST http://localhost:3000/categories/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Test Category"
+}
