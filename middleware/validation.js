@@ -40,12 +40,15 @@ const productValidationRules = () => [
     .isInt({ min: 0 })
     .withMessage('Stock must be a non-negative integer'),
 
-  body('SKU')
+    body('SKU')
     .trim()
     .notEmpty()
     .withMessage('SKU is required')
     .isString()
-    .withMessage('SKU must be a string'),
+    .withMessage('SKU must be a string')
+    .matches(/^GL-\d{4}-\d{3}$/)
+    .withMessage('SKU must follow the format: GL-YYYY-NNN (e.g., GL-2025-001)'),
+
 
   body('specifications')
     .optional()

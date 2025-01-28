@@ -35,7 +35,8 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: [true, 'SKU is required'],
       trim: true,
-      unique: true
+      unique: true,
+      match: [/^GL-\d{4}-\d{3}$/, 'Invalid SKU format. Must be like GL-2025-001']
     },
     specifications: {
       type: Object,
