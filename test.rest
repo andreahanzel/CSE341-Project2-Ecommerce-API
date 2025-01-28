@@ -26,7 +26,7 @@ Content-Type: application/json
 }
 
 ### Update a product
-PUT http://localhost:3000/products/67958295c1c223da61bcb315 HTTP/1.1
+PUT http://localhost:3000/products/6797f4bcc81961d41008e88e HTTP/1.1
 Content-Type: application/json
 
 {
@@ -39,7 +39,7 @@ Content-Type: application/json
 }
 
 ### Delete a product
-DELETE http://localhost:3000/products/67958a4c6eefe70588584359 HTTP/1.1
+DELETE http://localhost:3000/products/6797f4bcc81961d41008e88e HTTP/1.1
 
 ---
 
@@ -49,7 +49,7 @@ DELETE http://localhost:3000/products/67958a4c6eefe70588584359 HTTP/1.1
 GET http://localhost:3000/categories HTTP/1.1
 
 ### Get a single category by ID
-GET http://localhost:3000/categories/67953c4b97f9f01aac2a9d8a HTTP/1.1
+GET http://localhost:3000/categories/6799123b97f9f01aac2a9ddb HTTP/1.1
 
 ### Create a new category
 POST http://localhost:3000/categories/ HTTP/1.1
@@ -64,7 +64,7 @@ Content-Type: application/json
 }
 
 ### Update a category
-PUT http://localhost:3000/categories/67953c5697f9f01aac2a9d8c HTTP/1.1
+PUT http://localhost:3000/categories/6799123b97f9f01aac2a9ddb HTTP/1.1
 Content-Type: application/json
 
 {
@@ -73,7 +73,7 @@ Content-Type: application/json
 }
 
 ### Delete a category
-DELETE http://localhost:3000/categories/6797d03e68d9d6f210a6cb11 HTTP/1.1
+DELETE http://localhost:3000/categories/6799123b97f9f01aac2a9ddb HTTP/1.1
 
 ---
 
