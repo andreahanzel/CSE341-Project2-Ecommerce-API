@@ -173,4 +173,4 @@ export default {
   createCategory,
   updateCategory,
   deleteCategory
-};
+}; // Exporting the functions as an object

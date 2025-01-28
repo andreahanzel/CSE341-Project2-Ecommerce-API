@@ -1,4 +1,4 @@
-import { body, validationResult } from 'express-validator';
+import { body, validationResult } from 'express-validator'; // Validation rules for product and category
 
 const productValidationRules = () => [
   body('name')
@@ -56,7 +56,7 @@ const productValidationRules = () => [
     .optional()
     .isBoolean()
     .withMessage('InStock must be a boolean')
-];
+]; //Validation rules for product
 
 const categoryValidationRules = () => [
   body('name')
@@ -95,7 +95,7 @@ const categoryValidationRules = () => [
     .withMessage('Brands must be an array of strings')
     .custom((brands) => brands.every((brand) => typeof brand === 'string'))
     .withMessage('Each brand must be a string')
-];
+]; //Validation rules for category
 
 const validate = (req, res, next) => {
   const errors = validationResult(req);
@@ -111,6 +111,6 @@ const validate = (req, res, next) => {
     success: false,
     errors: extractedErrors
   });
-};
+}; //Middleware to validate request data
 
-export { productValidationRules, categoryValidationRules, validate };
+export { productValidationRules, categoryValidationRules, validate }; //Export validation rules and middleware

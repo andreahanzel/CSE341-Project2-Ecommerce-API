@@ -1,7 +1,7 @@
-import express from 'express';
-import productsController from '../controllers/products.js';
-import { productValidationRules, validate } from '../middleware/validation.js';
-import BaseError from '../helpers/baseError.js';
+import express from 'express'; // Router for product-related routes
+import productsController from '../controllers/products.js'; // Controller for product-related logic
+import { productValidationRules, validate } from '../middleware/validation.js'; // Validation rules and middleware
+import BaseError from '../helpers/baseError.js'; // Error handling class
 
 const router = express.Router();
 

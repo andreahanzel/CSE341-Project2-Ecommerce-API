@@ -8,6 +8,6 @@ class BaseError extends Error {
     this.isOperational = isOperational;
     Error.captureStackTrace(this);
   }
-}
+} 
 
-export default BaseError;
+export default BaseError; // BaseError class

@@ -1,7 +1,7 @@
-import express from 'express';
-import swaggerUi from 'swagger-ui-express';
-import fs from 'fs';
-import path from 'path';
+import express from 'express'; // Router for Swagger documentation
+import swaggerUi from 'swagger-ui-express'; // Middleware for serving Swagger UI
+import fs from 'fs'; // File system module
+import path from 'path'; // Path module
 
 const router = express.Router();
 

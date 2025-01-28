@@ -1,6 +1,6 @@
-import swaggerAutogen from 'swagger-autogen';
-import dotenv from 'dotenv';
-dotenv.config();
+import swaggerAutogen from 'swagger-autogen'; //Swagger documentation generator
+import dotenv from 'dotenv'; //Load environment variables
+dotenv.config(); //Load environment variables
 
 const doc = {
   info: {
@@ -10,7 +10,7 @@ const doc = {
   host: process.env.HOST || 'localhost:3000',
   basePath: '/',
   schemes: ['http', 'https']
-};
+}; //Swagger documentation configuration
 
 const outputFile = './swagger_output.json';
 const endpointsFiles = ['./routes/products.js', './routes/categories.js'];

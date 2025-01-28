@@ -1,6 +1,6 @@
-import { connectToDatabase } from '../config/database.js';
-import { ObjectId } from 'mongodb';
-import mongoose from 'mongoose';
+import { connectToDatabase } from '../config/database.js'; // Use connectToDatabase
+import { ObjectId } from 'mongodb'; // Use ObjectId
+import mongoose from 'mongoose'; // Use mongoose
 
 // Define Mongoose schema and model
 const productSchema = new mongoose.Schema({
@@ -46,7 +46,7 @@ const productSchema = new mongoose.Schema({
   }
 });
 
-const Product = mongoose.model('Product', productSchema);
+const Product = mongoose.model('Product', productSchema); // Mongoose model Product
 
 // Get all products
 const getAll = async (req, res) => {
@@ -59,7 +59,7 @@ const getAll = async (req, res) => {
     res.status(200).json(products);
   } catch (err) {
     console.error('Error in getAll:', err);
-    res.status(500).json({ message: 'Error fetching products', error: err.toString() });
+    res.status(500).json({ message: 'Error fetching products', error: err.toString() }); // Error handling
   }
 };
 
@@ -191,4 +191,4 @@ export default {
   createProduct,
   updateProduct,
   deleteProduct
-};
+}; // Exporting the functions

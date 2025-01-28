@@ -1,9 +1,9 @@
-import express from 'express';
-import categoriesController from '../controllers/categories.js';
-import { categoryValidationRules, validate } from '../middleware/validation.js';
-import BaseError from '../helpers/baseError.js';
+import express from 'express'; // Import express
+import categoriesController from '../controllers/categories.js'; // Import the categories controller
+import { categoryValidationRules, validate } from '../middleware/validation.js'; // Import validation rules and middleware
+import BaseError from '../helpers/baseError.js'; // Import BaseError for error handling
 
-const router = express.Router();
+const router = express.Router(); // Create a new router instance
 
 /**
  * @swagger

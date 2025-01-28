@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'; // Mongoose model Category
 
 const categorySchema = new mongoose.Schema(
   {
@@ -32,8 +32,8 @@ const categorySchema = new mongoose.Schema(
   {
     timestamps: true
   }
-);
+); // Mongoose model Category
 
-const Category = mongoose.model('Category', categorySchema);
+const Category = mongoose.model('Category', categorySchema); // Mongoose model Category
 
-export default Category;
+export default Category; // Mongoose model Category

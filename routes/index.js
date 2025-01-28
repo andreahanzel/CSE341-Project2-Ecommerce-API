@@ -1,7 +1,7 @@
-import express from 'express';
-import productsRouter from './products.js';
-import categoriesRouter from './categories.js';
-import swaggerRouter from './swagger.js';
+import express from 'express'; // Main router for the application
+import productsRouter from './products.js'; // Router for product-related routes
+import categoriesRouter from './categories.js'; // Router for category-related routes
+import swaggerRouter from './swagger.js'; // Router for Swagger documentation
 
 const router = express.Router();
 

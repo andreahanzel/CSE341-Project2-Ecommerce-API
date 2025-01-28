@@ -1,5 +1,6 @@
-import BaseError from '../helpers/baseError.js';
+import BaseError from '../helpers/baseError.js'; // Error handler middleware
 
+// Error handler middleware
 export const errorHandler = (err, req, res, _next) => {
   // If the error is operational, send it to the client
   if (err instanceof BaseError) {
@@ -7,7 +8,7 @@ export const errorHandler = (err, req, res, _next) => {
       status: 'error',
       statusCode: err.statusCode,
       message: err.message
-    });
+    }); 
   }
 
   // If it's a MongoDB error
