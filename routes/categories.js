@@ -20,10 +20,12 @@ const router = express.Router(); // Create a new router instance
  *       500:
  *         description: Internal Server Error
  *   post:
+ *     security:
+ *       - githubAuth: [] 
  *     tags:
  *       - Categories
- *     summary: Create a new category
- *     description: Add a new category to the database.
+ *     summary: Create a new category (requires authentication)
+ *     description: Add a new category to the database. Requires GitHub authentication.
  *     requestBody:
  *       required: true
  *       content:
@@ -52,6 +54,8 @@ const router = express.Router(); // Create a new router instance
  *     responses:
  *       201:
  *         description: Category created
+ *       401:
+ *         description: Unauthorized - Authentication required
  *       500:
  *         description: Internal Server Error
  */
@@ -83,10 +87,12 @@ router.post('/', isAuthenticated, categoryValidationRules(), validate, categorie
  *       500:
  *         description: Internal Server Error
  *   put:
+ *     security:
+ *       - githubAuth: [] 
  *     tags:
  *       - Categories
- *     summary: Update a category by ID
- *     description: Update a category's information using its unique ID.
+ *     summary: Update a category by ID (requires authentication)
+ *     description: Update a category's information using its unique ID. Requires GitHub authentication.
  *     parameters:
  *       - in: path
  *         name: id
@@ -122,6 +128,8 @@ router.post('/', isAuthenticated, categoryValidationRules(), validate, categorie
  *     responses:
  *       200:
  *         description: Category updated
+ *        401:
+ *         description: Unauthorized - Authentication required
  *       400:
  *         description: Invalid ID format
  *       404:
@@ -129,10 +137,12 @@ router.post('/', isAuthenticated, categoryValidationRules(), validate, categorie
  *       500:
  *         description: Internal Server Error
  *   delete:
+ *     security:
+ *       - githubAuth: [] 
  *     tags:
  *       - Categories
- *     summary: Delete a category by ID
- *     description: Delete a category using its unique ID.
+ *     summary: Delete a category by ID (requires authentication)
+ *     description: Delete a category using its unique ID. Requires GitHub authentication.
  *     parameters:
  *       - in: path
  *         name: id
@@ -143,6 +153,8 @@ router.post('/', isAuthenticated, categoryValidationRules(), validate, categorie
  *     responses:
  *       204:
  *         description: Category deleted successfully
+ *        401:
+ *         description: Unauthorized - Authentication required
  *       400:
  *         description: Invalid ID format
  *       404:

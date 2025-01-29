@@ -11,6 +11,14 @@
     "http",
     "https"
   ],
+  "securityDefinitions": {
+    "githubAuth": {
+      "type": "oauth2",
+      "flow": "implicit",
+      "authorizationUrl": "http://localhost:3000/login",
+      "description": "GitHub OAuth2 authentication"
+    }
+  },
   "paths": {
     "/products": {
       "get": {
@@ -24,8 +32,9 @@
         }
       },
       "post": {
+        "security": [{ "githubAuth": [] }],
         "tags": ["Products"],
-        "description": "Create a new product",
+        "description": "Create a new product (requires authentication)",
         "parameters": [
           {
             "name": "body",
@@ -53,6 +62,7 @@
         ],
         "responses": {
           "201": { "description": "Created" },
+          "401": { "description": "Unauthorized - Authentication required" },
           "500": { "description": "Internal Server Error" },
           "400": { "description": "Bad Request - Invalid Input" }
         }
@@ -71,8 +81,9 @@
         }
       },
       "put": {
+        "security": [{ "githubAuth": [] }],
         "tags": ["Products"],
-        "description": "Update a product by ID",
+        "description": "Update a product by ID (requires authentication)",
         "parameters": [
           { "name": "id", "in": "path", "required": true, "type": "string" },
           {
@@ -102,17 +113,20 @@
         "responses": {
           "200": { "description": "OK" },
           "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized - Authentication required" },
           "404": { "description": "Not Found" },
           "500": { "description": "Internal Server Error" }
         }
       },
       "delete": {
+        "security": [{ "githubAuth": [] }],
         "tags": ["Products"],
-        "description": "Delete a product by ID",
+        "description": "Delete a product by ID (requires authentication)",
         "parameters": [{ "name": "id", "in": "path", "required": true, "type": "string" }],
         "responses": {
           "200": { "description": "OK" },
           "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized - Authentication required" },
           "404": { "description": "Not Found" },
           "500": { "description": "Internal Server Error" }
         }
@@ -129,8 +143,9 @@
         }
       },
       "post": {
+        "security": [{ "githubAuth": [] }],
         "tags": ["Categories"],
-        "description": "Create a new category",
+        "description": "Create a new category (requires authentication)",
         "parameters": [
           {
             "name": "body",
@@ -155,6 +170,7 @@
         ],
         "responses": {
           "201": { "description": "Created" },
+          "401": { "description": "Unauthorized - Authentication required" },
           "500": { "description": "Internal Server Error" },
           "400": { "description": "Bad Request - Invalid Input" }
         }
@@ -173,8 +189,9 @@
         }
       },
       "put": {
+        "security": [{ "githubAuth": [] }],
         "tags": ["Categories"],
-        "description": "Update a category by ID",
+        "description": "Update a category by ID (requires authentication)",
         "parameters": [
           { "name": "id", "in": "path", "required": true, "type": "string" },
           {
@@ -201,17 +218,20 @@
         "responses": {
           "200": { "description": "OK" },
           "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized - Authentication required" },
           "404": { "description": "Not Found" },
           "500": { "description": "Internal Server Error" }
         }
       },
       "delete": {
+        "security": [{ "githubAuth": [] }],
         "tags": ["Categories"],
-        "description": "Delete a category by ID",
+        "description": "Delete a category by ID (requires authentication)",
         "parameters": [{ "name": "id", "in": "path", "required": true, "type": "string" }],
         "responses": {
           "200": { "description": "OK" },
           "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized - Authentication required" },
           "404": { "description": "Not Found" },
           "500": { "description": "Internal Server Error" }
         }

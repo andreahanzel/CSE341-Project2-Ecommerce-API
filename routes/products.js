@@ -20,10 +20,12 @@ const router = express.Router(); // Router for product-related routes
  *       500:
  *         description: Internal Server Error
  *   post:
+ *    security:
+ *      - githubAuth: [] 
  *     tags:
  *       - Products
- *     summary: Create a new product
- *     description: Add a new product to the database.
+ *     summary: Create a new product (requires authentication)
+ *     description: Add a new product to the database. Requires GitHub authentication.
  *     requestBody:
  *       required: true
  *       content:
@@ -61,6 +63,8 @@ const router = express.Router(); // Router for product-related routes
  *         description: Product created
  *       500:
  *         description: Internal Server Error
+ *       401:
+ *         description: Unauthorized - Authentication required
  */
 router.get('/', productsController.getAll);
 router.post('/', isAuthenticated, productValidationRules(), validate, productsController.createProduct);
@@ -91,10 +95,12 @@ router.post('/', isAuthenticated, productValidationRules(), validate, productsCo
  *       500:
  *         description: Internal Server Error
  *   put:
+ *    security:
+ *      - githubAuth: [] 
  *     tags:
  *       - Products
- *     summary: Update a product by ID
- *     description: Update a product's information using its unique ID.
+ *     summary: Update a product by ID (requires authentication)
+ *     description: Update a product's information using its unique ID. Requires GitHub authentication.
  *     parameters:
  *       - in: path
  *         name: id
@@ -137,6 +143,8 @@ router.post('/', isAuthenticated, productValidationRules(), validate, productsCo
  *     responses:
  *       200:
  *         description: Product updated
+ *       401:
+ *         description: Unauthorized - Authentication required
  *       400:
  *         description: Invalid ID format
  *       404:
@@ -144,10 +152,12 @@ router.post('/', isAuthenticated, productValidationRules(), validate, productsCo
  *       500:
  *         description: Internal Server Error
  *   delete:
+ *   security:
+ *      - githubAuth: [] 
  *     tags:
  *       - Products
- *     summary: Delete a product by ID
- *     description: Delete a product using its unique ID.
+ *     summary: Delete a product by ID (requires authentication)
+ *     description: Delete a product using its unique ID. Requires GitHub authentication.
  *     parameters:
  *       - in: path
  *         name: id
@@ -158,6 +168,8 @@ router.post('/', isAuthenticated, productValidationRules(), validate, productsCo
  *     responses:
  *       204:
  *         description: Product deleted successfully
+ *      401:
+ *         description: Unauthorized - Authentication required
  *       400:
  *         description: Invalid ID format
  *       404:
