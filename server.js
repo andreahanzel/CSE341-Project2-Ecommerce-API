@@ -28,7 +28,7 @@ app.use(
       ttl: 24 * 60 * 60 // 1 day
     }),
     cookie: {
-      secure: process.env.NODE_ENV === 'production',
+      secure: true, // Set to true if using https
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000
     },
@@ -41,7 +41,7 @@ app.use(passport.session());
 
 // CORS configuration
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: ['http://localhost:3000', 'https://cse341-ecommerce-api.onrender.com'],
   methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH'],
   credentials: true
 }));

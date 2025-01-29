@@ -5,7 +5,7 @@
     "description": "API for managing products and categories",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "cse341-ecommerce-api.onrender.com",
   "basePath": "/",
   "schemes": [
     "http",
@@ -15,7 +15,8 @@
     "githubAuth": {
       "type": "oauth2",
       "flow": "implicit",
-      "authorizationUrl": "https://cse341-ecommerce-api.onrender.com/login",
+      "authorizationUrl": "https://github.com/login/oauth/authorize",
+      "redirectUri": "https://cse341-ecommerce-api.onrender.com/github/callback",
       "description": "GitHub OAuth2 authentication"
     }
   },
