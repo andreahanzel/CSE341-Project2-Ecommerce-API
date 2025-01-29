@@ -15,7 +15,6 @@
       "type": "oauth2",
       "flow": "implicit",
       "authorizationUrl": "https://github.com/login/oauth/authorize",
-      "redirectUri": "https://cse341-ecommerce-api.onrender.com/github/callback",
       "description": "GitHub OAuth2 authentication"
     }
   },
