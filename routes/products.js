@@ -2,6 +2,7 @@ import express from 'express'; // Router for product-related routes
 import productsController from '../controllers/products.js'; // Controller for product-related logic
 import { productValidationRules, validate } from '../middleware/validation.js'; // Validation rules and middleware
 import BaseError from '../helpers/baseError.js'; // Error handling class
+import { isAuthenticated } from '../middleware/authenticate.js';
 
 const router = express.Router(); // Router for product-related routes
 
@@ -62,7 +63,8 @@ const router = express.Router(); // Router for product-related routes
  *         description: Internal Server Error
  */
 router.get('/', productsController.getAll);
-router.post('/', productValidationRules(), validate, productsController.createProduct);
+router.post('/', isAuthenticated, productValidationRules(), validate, productsController.createProduct);
+
 
 /**
  * @swagger
@@ -174,7 +176,8 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.put('/:id', productValidationRules(), validate, productsController.updateProduct);
-router.delete('/:id', productsController.deleteProduct);
+router.put('/:id', isAuthenticated, productValidationRules(), validate, productsController.updateProduct);
+router.delete('/:id', isAuthenticated, productsController.deleteProduct);
+
 
 export default router;

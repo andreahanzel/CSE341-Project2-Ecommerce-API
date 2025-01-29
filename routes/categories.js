@@ -2,6 +2,7 @@ import express from 'express'; // Import express
 import categoriesController from '../controllers/categories.js'; // Import the categories controller
 import { categoryValidationRules, validate } from '../middleware/validation.js'; // Import validation rules and middleware
 import BaseError from '../helpers/baseError.js'; // Import BaseError for error handling
+import { isAuthenticated } from '../middleware/authenticate.js';
 
 const router = express.Router(); // Create a new router instance
 
@@ -55,7 +56,7 @@ const router = express.Router(); // Create a new router instance
  *         description: Internal Server Error
  */
 router.get('/', categoriesController.getAll);
-router.post('/', categoryValidationRules(), validate, categoriesController.createCategory);
+router.post('/', isAuthenticated, categoryValidationRules(), validate, categoriesController.createCategory);
 
 /**
  * @swagger
@@ -160,7 +161,7 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.put('/:id', categoryValidationRules(), validate, categoriesController.updateCategory);
-router.delete('/:id', categoriesController.deleteCategory);
+router.put('/:id', isAuthenticated, categoryValidationRules(), validate, categoriesController.updateCategory);
+router.delete('/:id', isAuthenticated, categoriesController.deleteCategory);
 
 export default router;
