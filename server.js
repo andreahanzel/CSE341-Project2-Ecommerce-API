@@ -10,6 +10,7 @@ import passport from 'passport';
 import session from 'express-session';
 import { Strategy as GitHubStrategy } from 'passport-github2';
 import cors from 'cors';
+import MongoStore from 'connect-mongo';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -22,11 +23,14 @@ app.use(
     secret: process.env.SESSION_SECRET || 'secret',
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI,
+      ttl: 24 * 60 * 60 // 1 day
+    }),
     cookie: {
       secure: process.env.NODE_ENV === 'production',
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
-      sameSite: 'lax'
+      maxAge: 24 * 60 * 60 * 1000
     },
     name: 'sessionId'
   })
