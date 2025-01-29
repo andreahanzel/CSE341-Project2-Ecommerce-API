@@ -20,34 +20,42 @@ app.use(bodyParser.json());
 // Updated session configuration
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || 'secret',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
       mongoUrl: process.env.MONGODB_URI,
-      ttl: 24 * 60 * 60 // 1 day
+      ttl: 24 * 60 * 60
     }),
     cookie: {
-      secure: process.env.NODE_ENV === 'production',
+      secure: false, // Set to true only if using HTTPS
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000
-    },
-    name: 'sessionId'
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: 'lax'
+    }
   })
 );
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-// CORS configuration
+/// CORS configuration
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: process.env.NODE_ENV === 'production' 
+    ? 'https://cse341-ecommerce-api.onrender.com' 
+    : 'http://localhost:3000',
   methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH'],
-  credentials: true
+  credentials: true,
+  optionsSuccessStatus: 200
 }));
 
+// CORS Headers middleware
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  const allowedOrigin = process.env.NODE_ENV === 'production'
+    ? 'https://cse341-ecommerce-api.onrender.com'
+    : 'http://localhost:3000';
+
+  res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader(
     'Access-Control-Allow-Headers',
@@ -57,6 +65,13 @@ app.use((req, res, next) => {
     'Access-Control-Allow-Methods',
     'GET, POST, PUT, PATCH, OPTIONS, DELETE'
   );
+  res.setHeader('Access-Control-Max-Age', '3600');
+
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    return res.status(200).send();
+  }
+
   next();
 });
 
@@ -69,10 +84,7 @@ passport.use(
       callbackURL: process.env.CALLBACK_URL,
     },
     function (accessToken, refreshToken, profile, done) {
-      console.log('GitHub Strategy Callback:', {
-        profileId: profile.id,
-        username: profile.username
-      });
+      // Store the entire profile in session
       const user = {
         id: profile.id,
         username: profile.username,
@@ -137,18 +149,13 @@ app.get('/auth/status', (req, res) => {
 // GitHub callback route
 app.get(
   '/github/callback',
-  (req, res, next) => {
-    console.log('Entering callback route');
-    next();
-  },
   passport.authenticate('github', { 
     failureRedirect: '/api-docs',
+    successRedirect: '/',
     session: true
   }),
   (req, res) => {
-    console.log('Authentication successful', {
-      user: req.user?.username
-    });
+    req.session.user = req.user;
     res.redirect('/');
   }
 );
@@ -168,6 +175,16 @@ app.get('/logout', (req, res, next) => {
       }
       res.redirect('/');
     });
+  });
+});
+
+
+// Debugging route
+app.get('/debug', (req, res) => {
+  res.json({
+    session: req.session,
+    user: req.user,
+    isAuthenticated: req.isAuthenticated()
   });
 });
 

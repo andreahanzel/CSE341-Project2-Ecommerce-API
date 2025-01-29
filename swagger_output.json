@@ -15,7 +15,7 @@
     "githubAuth": {
       "type": "oauth2",
       "flow": "implicit",
-      "authorizationUrl": "http://localhost:3000/login",
+      "authorizationUrl": "https://cse341-ecommerce-api.onrender.com/login",
       "description": "GitHub OAuth2 authentication"
     }
   },
