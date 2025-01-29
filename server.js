@@ -15,6 +15,9 @@ import MongoStore from 'connect-mongo';
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Trust proxy to ensure secure cookies work correctly on Render
+app.set('trust proxy', 1);
+
 app.use(bodyParser.json());
 
 // Updated session configuration
@@ -28,7 +31,7 @@ app.use(
       ttl: 24 * 60 * 60 // 1 day
     }),
     cookie: {
-      secure: true, // Set to true if using https
+      secure: true, // Set to true since you're using HTTPS
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000
     },
@@ -39,15 +42,17 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// CORS configuration
-app.use(cors({
-  origin: ['http://localhost:3000', 'https://cse341-ecommerce-api.onrender.com'],
-  methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH'],
-  credentials: true
-}));
+// CORS configuration - ensure secure communication
+app.use(
+  cors({
+    origin: ['https://cse341-ecommerce-api.onrender.com'], // Only allow secure URLs
+    methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH'],
+    credentials: true
+  })
+);
 
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.setHeader('Access-Control-Allow-Origin', 'https://cse341-ecommerce-api.onrender.com'); // Force HTTPS
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader(
     'Access-Control-Allow-Headers',
@@ -66,30 +71,48 @@ passport.use(
     {
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: process.env.CALLBACK_URL,
+      callbackURL: process.env.CALLBACK_URL || "https://cse341-ecommerce-api.onrender.com/github/callback",
     },
-    function (accessToken, refreshToken, profile, done) {
-      console.log('GitHub Strategy Callback:', {
-        profileId: profile.id,
-        username: profile.username
-      });
-      const user = {
-        id: profile.id,
-        username: profile.username,
-        displayName: profile.displayName,
-        provider: 'github'
-      };
-      return done(null, user);
+    async function (accessToken, refreshToken, profile, done) {
+      try {
+        if (!profile || !profile.id) {
+          console.error("GitHub authentication failed: No profile received.");
+          return done(null, false, { message: "GitHub authentication failed" });
+        }
+
+        console.log("GitHub OAuth callback received:", {
+          profileId: profile.id,
+          username: profile.username,
+          displayName: profile.displayName
+        });
+
+        // Create user object
+        const user = {
+          id: profile.id,
+          username: profile.username,
+          displayName: profile.displayName || profile.username,
+          provider: "github",
+        };
+
+        return done(null, user);
+      } catch (error) {
+        console.error("Error in GitHub OAuth callback:", error);
+        return done(error);
+      }
     }
   )
 );
 
+// Serialize user to store in session
 passport.serializeUser((user, done) => {
+  console.log("Serializing user:", user);
   done(null, user);
 });
 
-passport.deserializeUser((obj, done) => {
-  done(null, obj);
+// Deserialize user when retrieving session
+passport.deserializeUser((user, done) => {
+  console.log("Deserializing user:", user);
+  done(null, user);
 });
 
 // Debug middleware

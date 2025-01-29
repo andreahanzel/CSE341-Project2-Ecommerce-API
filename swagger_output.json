@@ -8,7 +8,6 @@
   "host": "cse341-ecommerce-api.onrender.com",
   "basePath": "/",
   "schemes": [
-    "http",
     "https"
   ],
   "securityDefinitions": {
